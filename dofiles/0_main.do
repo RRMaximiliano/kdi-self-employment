@@ -31,13 +31,15 @@
 		
 *** 0.1 Set file path
 	if inlist("`c(username)'","maximiliano","WB559559", "wb559559"){
-		global project			"D:/Documents/GitHub/reserach-projects/kdi-self-employment"
+		global project			"D:/Documents/GitHub/research-projects/kdi-self-employment"
 	} 
 	
 	
 *** 0.2 Setting up folders
-	global dofiles	"${project}/dofiles"
-	global data		"${project}/data"
+	global dofiles		"${project}/dofiles"
+	global data			"${project}/data"
+	global outputs 		"${project}/outputs/tables"
+	global figures		"${project}/outputs/figures"
 	
 	global emnv_2005	"${data}/raw/2005"
 	global emnv_2009	"${data}/raw/2009"
@@ -48,16 +50,38 @@
 *** 0.0 Install required packages	
 	run "${dofiles}/programs/packages.do"	 
 
-	packages tabout ietoolkit winsor esttab nsplit 									// Add update option to update the packages
+	packages tabout ietoolkit winsor esttab nsplit esttab outreg2
 	ieboilstart, version(15.1)
 	
+	
+*** 0.4 Execution globals
+	global cleaning 	1
+	global append_dta	1
+	global construct	1
+	
+	set scheme s1color 	
 	
 ********************************************************************************
 ***	Part 1:  Cleaning 
 ********************************************************************************
 	
 *** Creating easy to read long versions of datasets
-
+	if (${cleaning}==1) {
+		do "${dofiles}/cleaning/01_emnv_2005_population.do"
+		do "${dofiles}/cleaning/02_emnv_2009_population.do"
+		do "${dofiles}/cleaning/03_emnv_2014_population.do"
+	}
+	
+*** Append datasets
+	if (${append_dta}==1) {
+		do "${dofiles}/cleaning/04_append_datasets.do"
+	}
+	
+*** Construction
+	if (${construct}==1) {
+		do "${dofiles}/construct/01_construct.do"
+	}	
+	
 	
 *	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 *	Do files EMNV 2014 

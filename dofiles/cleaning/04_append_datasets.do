@@ -27,6 +27,7 @@
 	append using "${data_int}/emnv_09_pop.dta"
 	append using "${data_int}/emnv_14_pop.dta"
 	
+*** Save dataset
 	save "${data_int}/emnv_appended.dta", replace 
 	
 	
