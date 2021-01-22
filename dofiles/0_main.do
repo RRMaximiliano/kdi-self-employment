@@ -55,9 +55,10 @@
 	
 	
 *** 0.4 Execution globals
-	global cleaning 	1
-	global append_dta	1
-	global construct	1
+	global cleaning 	0
+	global append_dta	0
+	global construct	0
+	global analysis		0
 	
 	set scheme s1color 	
 	
@@ -82,37 +83,10 @@
 		do "${dofiles}/construct/01_construct.do"
 	}	
 	
-	
-*	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*	Do files EMNV 2014 
-*	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	/*
-	do "$dofiles\EMNV 2014 - Household Assets" 
-	do "$dofiles\EMNV 2014 - Vivienda" 
-	do "$dofiles\EMNV 2014 - Merging - Household + Household's Assets" 
-	do "$dofiles\EMNV 2014 - Population"
-	do "$dofiles\EMNV 2014 - Business"
-	do "$dofiles\EMNV 2014 - Merging - Business + Pop"
-	do "$dofiles\EMNV 2014 - Business + Population"
-	do "$dofiles\EMNV 2014 - Poverty"
-	do "$dofiles\EMNV 2014 - Social Programs"
-	*/ 
-	
-*	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*	Do files EMNV 2005
-*	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	*do "$dofiles\EMNV 2005 - Population"
-
-*	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*	Append 
-*	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	*do "$dofiles\EMNV 2005-2014 Append"
-
-*	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-*	Analysis 
-*	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	* do "$dofiles\Diff-i-Diff 2005-2009-2014" 
-
+*** Analysis
+	if (${analysis}==1) {
+		do 
+	}
  
 *	===================================================================================================
 *												END		

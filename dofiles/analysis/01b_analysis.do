@@ -24,6 +24,7 @@
 	use "${data_int}/emnv_cuaen_eligibility.dta", clear 
 	
 	global sig "nocons label"
+	global caliper = 0.0001
 	
 	//	Table 1: Summary Statistics
 	local 	vars		///	
@@ -35,7 +36,18 @@
 			real_income_1 		///
 			ln_real_income_1 	///
 			eligibility_1
-			
+	
+	// Generate sector 
+	recode 	cat_1									///
+			(2 6 13/18= 0)							///	
+			(1 = 1 "Agriculture and Forestry" )		///
+			(3/5 7 = 2 "Manufacture Industry") 		///
+			(8 = 3 "Construction") 					///
+			(9 10 11 = 4 "Commerce") 				///
+			(12 = 5 "Hotels and Restaurants"), 		///
+	gen(sector)
+		
+	// Overall summ stats by year
 	local years "2005 2009 2014"
 	local append "replace"
 	foreach y in `years' {
@@ -47,19 +59,43 @@
 			
 		local append "append"
 	}
+
+	// Overall summ stats by gender and year
+	local append "replace"
+	forvalues sex = 0/1 {
+		foreach y in `years' {
+			estpost sum `vars' if selfemployment_1 == 1 & year == `y' & sex == `sex'
+			
+			esttab 	using "${outputs}/summ_stats_gender.csv", `append'						///	
+				cells("count(fmt(0)) mean(fmt(2)) sd(fmt(2)) min max") label nogaps 		///
+				fragment nomtitle nonumbers nodepvar noobs collabels(none)		
+				
+			local append "append"
+		}	
+	}
 	
+	// Pooled all years 
 	estpost sum `vars' if selfemployment_1 == 1
 		
 	esttab 	using "${outputs}/summ_stats_pooled.csv", replace							///	
 			cells("count(fmt(0)) mean(fmt(2)) sd(fmt(2)) min max") label nogaps 		///
 			fragment nomtitle nonumbers nodepvar noobs collabels(none)	
+			
+	// Pooled by gender	
+	local append "replace"
+	forvalues sex = 0/1 {
+		estpost sum `vars' if selfemployment_1 == 1 & sex == `sex'
+		
+		esttab 	using "${outputs}/summ_stats_pooled_gender.csv", `append'				///	
+			cells("count(fmt(0)) mean(fmt(2)) sd(fmt(2)) min max") label nogaps 		///
+			fragment nomtitle nonumbers nodepvar noobs collabels(none)	
+			
+		local append "append"
+	}		
+		
 	
-	bys year: outreg2 if selfemployment_1==1 using "${outputs}/summ_stats.xml", 		///
-		replace sum(log) eqkeep(mean sd) label keep(`vars') sortvar(`vars')
-
-	outreg2 if selfemployment_1==1 using "${outputs}/summ_stats_pooled.xml", 			///
-		replace sum(log) eqkeep(mean sd) label keep(`vars') sortvar(`vars')
-
+	// Drop agriculture sector 
+	drop if sector == 1
 	
 	// Table 2: Parallel Trends Assumption Test
 	preserve 
@@ -67,24 +103,24 @@
 		keep if time != 2
 
 		local vars "sex edu area age household_size"
-		psmatch2 eligibility_1 `vars', out(ln_real_income_1) com caliper(0.01) 
+		psmatch2 eligibility_1 `vars', out(ln_real_income_1) com caliper(${caliper}) 
 		
 		reg ln_real_income_1 time##_treated ib7.main_cat_1 [fw=_weight], 								vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/parallel_trend.xml", replace $sig 																///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, No, Regional  Fixed Effects, No, Occupation Fixed Effects, No)		///
-			keep(1.time 1._treated 1.time#1._treated)
+			keep(1.time#1._treated 1.time 1._treated)
 		reg ln_real_income_1 time##_treated ib7.main_cat_1 `vars' [fw=_weight], 						vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/parallel_trend.xml", $sig 																		///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, No, Occupation Fixed Effects, No)		///
-			keep(1.time 1._treated 1.time#1._treated)		
+			keep(1.time#1._treated 1.time 1._treated)		
 		reg ln_real_income_1 time##_treated ib7.main_cat_1 `vars' i.dominio4  [fw=_weight], 			vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/parallel_trend.xml", $sig 																		///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, No)		///
-			keep(1.time 1._treated 1.time#1._treated)	
+			keep(1.time#1._treated 1.time 1._treated)	
 		reg ln_real_income_1 time##_treated ib7.main_cat_1 `vars' i.dominio4 i.occup_1 [fw=_weight], 	vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/parallel_trend.xml", $sig 																		///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, Yes)	///
-			keep(1.time 1._treated 1.time#1._treated)			
+			keep(1.time#1._treated 1.time 1._treated)			
 	restore 
 	
 	// Table 3: Falsification Test
@@ -93,25 +129,24 @@
 		recode time (1=0) (2=1)
 		
 		local vars "sex edu area age household_size"
-		psmatch2 eligibility_1 `vars', out(ln_real_income_1) com caliper(0.01) 
+		psmatch2 eligibility_1 `vars', out(ln_real_income_1) com caliper(${caliper}) 
 	
 		reg ln_real_income_1 time##_treated ib7.main_cat_1 [fw=_weight], 								vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/falsification.xml", replace $sig 																///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, No, Regional  Fixed Effects, No, Occupation Fixed Effects, No)	///
-			keep(1.time 1._treated 1.time#1._treated)
+			keep(1.time#1._treated 1.time 1._treated)
 		reg ln_real_income_1 time##_treated ib7.main_cat_1 `vars' [fw=_weight], 						vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/falsification.xml", $sig 																		///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, No, Occupation Fixed Effects, No)	///
-			keep(1.time 1._treated 1.time#1._treated)		
+			keep(1.time#1._treated 1.time 1._treated)		
 		reg ln_real_income_1 time##_treated ib7.main_cat_1 `vars' i.dominio4  [fw=_weight], 			vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/falsification.xml", $sig 																		///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, No)	///
-			keep(1.time 1._treated 1.time#1._treated)	
+			keep(1.time#1._treated 1.time 1._treated)	
 		reg ln_real_income_1 time##_treated ib7.main_cat_1 `vars' i.dominio4 i.occup_1 [fw=_weight], 	vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/falsification.xml", $sig 																			///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, Yes)	///
-			keep(1.time 1._treated 1.time#1._treated)	
-		
+			keep(1.time#1._treated 1.time 1._treated)	
 	restore
 	
 	
@@ -124,24 +159,24 @@
 		recode time (1=0) (2=1)
 	
 		local vars "sex edu area age household_size"
-		psmatch2 eligibility_1 `vars', out(ln_real_income_1) com caliper(0.01) 
+		psmatch2 eligibility_1 `vars', out(ln_real_income_1) com caliper(${caliper}) 
 	
 		reg ln_real_income_1 time##_treated ib7.main_cat_1 [fw=_weight], 								vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/main_did.xml", replace $sig 																		///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, No, Regional  Fixed Effects, No, Occupation Fixed Effects, No)		///
-			keep(1.time 1._treated 1.time#1._treated)
+			keep(1.time#1._treated 1.time 1._treated)
 		reg ln_real_income_1 time##_treated ib7.main_cat_1 `vars' [fw=_weight], 						vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/main_did.xml", $sig 																				///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, No, Occupation Fixed Effects, No)		///
-			keep(1.time 1._treated 1.time#1._treated)		
+			keep(1.time#1._treated 1.time 1._treated)		
 		reg ln_real_income_1 time##_treated ib7.main_cat_1 `vars' i.dominio4  [fw=_weight], 			vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/main_did.xml", $sig 																				///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, No)		///
-			keep(1.time 1._treated 1.time#1._treated)	
+			keep(1.time#1._treated 1.time 1._treated)	
 		reg ln_real_income_1 time##_treated ib7.main_cat_1 `vars' i.dominio4 i.occup_1 [fw=_weight], 	vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/main_did.xml", $sig 																				///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, Yes)	///
-			keep(1.time 1._treated 1.time#1._treated)	
+			keep(1.time#1._treated 1.time 1._treated)	
 			
 		// Table 5: DID by Sex
 		local vars "sex edu area age household_size"
@@ -149,19 +184,19 @@
 			reg ln_real_income_1 time##_treated ib7.main_cat_1 [fw=_weight] if sex == `x', 									vce(cluster time_activity_1) 
 				outreg2 using "${outputs}/main_did_`x'.xml", replace $sig 																		///
 				addtext(Primary Activity Fixed Effects, Yes, Controls, No, Regional  Fixed Effects, No, Occupation Fixed Effects, No)			///
-				keep(1.time 1._treated 1.time#1._treated)	
+				keep(1.time#1._treated 1.time 1._treated)	
 			reg ln_real_income_1 time##_treated ib7.main_cat_1 `vars' [fw=_weight] if sex == `x', 							vce(cluster time_activity_1) 
 				outreg2 using "${outputs}/main_did_`x'.xml", $sig 																				///
 				addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, No, Occupation Fixed Effects, No)			///
-				keep(1.time 1._treated 1.time#1._treated)			
+				keep(1.time#1._treated 1.time 1._treated)			
 			reg ln_real_income_1 time##_treated ib7.main_cat_1 `vars' i.dominio4  [fw=_weight] if sex == `x',				vce(cluster time_activity_1) 
 				outreg2 using "${outputs}/main_did_`x'.xml", $sig 																				///
 				addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, No)			///
-				keep(1.time 1._treated 1.time#1._treated)	
+				keep(1.time#1._treated 1.time 1._treated)	
 			reg ln_real_income_1 time##_treated ib7.main_cat_1 `vars' i.dominio4 i.occup_1 [fw=_weight] if sex == `x', 		vce(cluster time_activity_1) 
 				outreg2 using "${outputs}/main_did_`x'.xml", $sig 																				///
 				addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, Yes)		///
-				keep(1.time 1._treated 1.time#1._treated)	
+				keep(1.time#1._treated 1.time 1._treated)	
 		}
 
 		// Table 6: DID by education
@@ -173,30 +208,51 @@
 		reg ln_real_income_1 time##_treated ib7.main_cat_1 `vars' i.dominio4  [fw=_weight] 			if primary ==1, 	vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/main_did_educ.xml", $sig replace																		///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, No, Occupation Fixed Effects, No)			///
-			keep(1.time 1._treated 1.time#1._treated)		
+			keep(1.time#1._treated 1.time 1._treated)		
 		reg ln_real_income_1 time##_treated ib7.main_cat_1 `vars' i.dominio4 i.occup_1 [fw=_weight] if primary ==1, 	vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/main_did_educ.xml", $sig 																				///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, Yes)		///
-			keep(1.time 1._treated 1.time#1._treated)			
+			keep(1.time#1._treated 1.time 1._treated)			
 		reg ln_real_income_1 time##_treated ib7.main_cat_1 `vars' i.dominio4  [fw=_weight] 			if high_school ==1, vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/main_did_educ.xml", $sig																			  	///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, No, Occupation Fixed Effects, No)			///
-			keep(1.time 1._treated 1.time#1._treated)		
+			keep(1.time#1._treated 1.time 1._treated)		
 		reg ln_real_income_1 time##_treated ib7.main_cat_1 `vars' i.dominio4 i.occup_1 [fw=_weight] if high_school ==1, vce(cluster time_activity_1) 	
 			outreg2 using "${outputs}/main_did_educ.xml", $sig 																				///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, Yes)		///
-			keep(1.time 1._treated 1.time#1._treated)			
+			keep(1.time#1._treated 1.time 1._treated)			
 		reg ln_real_income_1 time##_treated ib7.main_cat_1 `vars' i.dominio4  [fw=_weight] 			if more_hs ==1, 	vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/main_did_educ.xml", $sig																			  	///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, No, Occupation Fixed Effects, No)			///
-			keep(1.time 1._treated 1.time#1._treated)				
+			keep(1.time#1._treated 1.time 1._treated)				
 		reg ln_real_income_1 time##_treated ib7.main_cat_1 `vars' i.dominio4 i.occup_1 [fw=_weight] if more_hs ==1, 	vce(cluster time_activity_1)
 			outreg2 using "${outputs}/main_did_educ.xml", $sig 																				///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, Yes)		///
-			keep(1.time 1._treated 1.time#1._treated)	
+			keep(1.time#1._treated 1.time 1._treated)	
 		
+		// By gender
+		local vars "sex edu area age household_size"
+		local append "replace"
+		
+		forvalues sex = 0/1 {
+			reg ln_real_income_1 time##_treated ib7.main_cat_1 `vars' i.dominio4 i.occup_1 [fw=_weight] if primary ==1 & sex == `sex', 	vce(cluster time_activity_1)
+				outreg2 using "${outputs}/main_did_educ_sex.xml", $sig 	`append'																///
+				addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, Yes)		///
+				keep(1.time#1._treated 1.time 1._treated)	
+			reg ln_real_income_1 time##_treated ib7.main_cat_1 `vars' i.dominio4 i.occup_1 [fw=_weight] if high_school ==1 & sex == `sex', 	vce(cluster time_activity_1)
+				outreg2 using "${outputs}/main_did_educ_sex.xml", $sig 																			///
+				addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, Yes)		///
+				keep(1.time#1._treated 1.time 1._treated)	
+			reg ln_real_income_1 time##_treated ib7.main_cat_1 `vars' i.dominio4 i.occup_1 [fw=_weight] if more_hs ==1 & sex == `sex', 	vce(cluster time_activity_1)
+				outreg2 using "${outputs}/main_did_educ_sex.xml", $sig 																			///
+				addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, Yes)		///
+				keep(1.time#1._treated 1.time 1._treated)
+				
+			local append "append"
+		} 
 		
 		// Table 7: By Sector
+		/*
 		recode 	cat_1									///
 				(2 6 13/18= 0)							///	
 				(1 = 1 "Agriculture and Forestry" )		///
@@ -205,6 +261,7 @@
 				(9 10 11 = 4 "Commerce") 				///
 				(12 = 5 "Hotels and Restaurants"), 		///
 		gen(sector)
+		*/
 		
 		local vars "sex edu area age household_size"
 		reg ln_real_income_1 time##sector ib7.main_cat_1 [fw=_weight], 								vce(cluster time_activity_1) 
@@ -225,6 +282,23 @@
 			keep(1.time i.sector 1.time#i.sector)			
 		
 		
+		// Sector by gender
+		local vars "sex edu area age household_size"
+		local append "replace"
+		forvalues sex = 0/1 {	
+			reg ln_real_income_1 time##sector ib7.main_cat_1 `vars' i.dominio4  [fw=_weight] if sex == `sex', 			vce(cluster time_activity_1) 
+				outreg2 using "${outputs}/sector_gender.xml", $sig `append'																	///
+				addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, No)		///
+				keep(1.time i.sector 1.time#i.sector)	
+			reg ln_real_income_1 time##sector ib7.main_cat_1 `vars' i.dominio4 i.occup_1 [fw=_weight] if sex == `sex', 	vce(cluster time_activity_1) 
+				outreg2 using "${outputs}/sector_gender.xml", $sig 																			///
+				addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, Yes)	///
+				keep(1.time i.sector 1.time#i.sector)			
+				
+			local append "append"
+		}
+		
+		
 		// Table 8: Winsorizing
 		winsor2 ln_real_income_1, cuts(1 99) suffix(_win) label
 		winsor2 ln_real_income_1, cuts(10 90) suffix(_win2) label
@@ -233,19 +307,19 @@
 		reg ln_real_income_1_win time##_treated ib7.main_cat_1 `vars' i.dominio4  [fw=_weight], 			vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/main_did_win.xml", replace $sig 																	///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, No)		///
-			keep(1.time 1._treated 1.time#1._treated)	
+			keep(1.time#1._treated 1.time 1._treated)	
 		reg ln_real_income_1_win time##_treated ib7.main_cat_1 `vars' i.dominio4 i.occup_1 [fw=_weight], 	vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/main_did_win.xml", $sig 																			///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, Yes)	///
-			keep(1.time 1._treated 1.time#1._treated)	
+			keep(1.time#1._treated 1.time 1._treated)	
 		reg ln_real_income_1_win2 time##_treated ib7.main_cat_1 `vars' i.dominio4  [fw=_weight], 			vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/main_did_win.xml", $sig 																			///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, No)		///
-			keep(1.time 1._treated 1.time#1._treated)	
+			keep(1.time#1._treated 1.time 1._treated)	
 		reg ln_real_income_1_win2 time##_treated ib7.main_cat_1 `vars' i.dominio4 i.occup_1 [fw=_weight], 	vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/main_did_win.xml", $sig 																			///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, Yes)	///
-			keep(1.time 1._treated 1.time#1._treated)			
+			keep(1.time#1._treated 1.time 1._treated)			
 	
 	
 		// Figures
@@ -288,37 +362,61 @@
 		reg training time##_treated ib7.main_cat_1 `vars' i.dominio4  [fw=_weight], 			vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/other_outcomes.xml", replace $sig 																///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, No)		///
-			keep(1.time 1._treated 1.time#1._treated)	
+			keep(1.time#1._treated 1.time 1._treated)	
 		reg training time##_treated ib7.main_cat_1 `vars' i.dominio4 i.occup_1 [fw=_weight], 	vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/other_outcomes.xml", $sig 																		///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, Yes)	///
-			keep(1.time 1._treated 1.time#1._treated)	
+			keep(1.time#1._treated 1.time 1._treated)	
 		reg hours time##_treated ib7.main_cat_1 `vars' i.dominio4  [fw=_weight], 			vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/other_outcomes.xml", $sig 																		///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, No)		///
-			keep(1.time 1._treated 1.time#1._treated)	
+			keep(1.time#1._treated 1.time 1._treated)	
 		reg hours time##_treated ib7.main_cat_1 `vars' i.dominio4 i.occup_1 [fw=_weight], 	vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/other_outcomes.xml", $sig 																		///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, Yes)	///
-			keep(1.time 1._treated 1.time#1._treated)		
+			keep(1.time#1._treated 1.time 1._treated)		
 		reg working_months_1 time##_treated ib7.main_cat_1 `vars' i.dominio4  [fw=_weight], 			vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/other_outcomes.xml", $sig 																		///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, No)		///
-			keep(1.time 1._treated 1.time#1._treated)	
+			keep(1.time#1._treated 1.time 1._treated)	
 		reg working_months_1 time##_treated ib7.main_cat_1 `vars' i.dominio4 i.occup_1 [fw=_weight], 	vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/other_outcomes.xml", $sig 																		///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, Yes)	///
-			keep(1.time 1._treated 1.time#1._treated)		
+			keep(1.time#1._treated 1.time 1._treated)		
 		reg n_jobs time##_treated ib7.main_cat_1 `vars' i.dominio4  [fw=_weight], 			vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/other_outcomes.xml", $sig 																		///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, No)		///
-			keep(1.time 1._treated 1.time#1._treated)	
+			keep(1.time#1._treated 1.time 1._treated)	
 		reg n_jobs time##_treated ib7.main_cat_1 `vars' i.dominio4 i.occup_1 [fw=_weight], 	vce(cluster time_activity_1) 
 			outreg2 using "${outputs}/other_outcomes.xml", $sig 																		///
 			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, Yes)	///
-			keep(1.time 1._treated 1.time#1._treated)				
+			keep(1.time#1._treated 1.time 1._treated)				
 			
 		
+	// Other outcomes by sex
+	local vars "sex edu area age household_size"	
+	local append "replace"
+	forvalues sex = 0/1 {
+		reg training time##_treated ib7.main_cat_1 `vars' i.dominio4 i.occup_1 [fw=_weight] if sex == `sex', 	vce(cluster time_activity_1) 
+			outreg2 using "${outputs}/other_outcomes_sex.xml", $sig  `append'															///
+			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, Yes)	///
+			keep(1.time#1._treated 1.time 1._treated)	
+		reg hours time##_treated ib7.main_cat_1 `vars' i.dominio4 i.occup_1 [fw=_weight] if sex == `sex', 	vce(cluster time_activity_1) 
+			outreg2 using "${outputs}/other_outcomes_sex.xml", $sig 																	///
+			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, Yes)	///
+			keep(1.time#1._treated 1.time 1._treated)					
+		reg working_months_1 time##_treated ib7.main_cat_1 `vars' i.dominio4 i.occup_1 [fw=_weight] if sex == `sex', 	vce(cluster time_activity_1) 
+			outreg2 using "${outputs}/other_outcomes_sex.xml", $sig 																	///
+			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, Yes)	///
+			keep(1.time#1._treated 1.time 1._treated)			
+		reg n_jobs time##_treated ib7.main_cat_1 `vars' i.dominio4 i.occup_1 [fw=_weight] if sex == `sex', 	vce(cluster time_activity_1) 
+			outreg2 using "${outputs}/other_outcomes_sex.xml", $sig 																	///
+			addtext(Primary Activity Fixed Effects, Yes, Controls, Yes, Regional  Fixed Effects, Yes, Occupation Fixed Effects, Yes)	///
+			keep(1.time#1._treated 1.time 1._treated)
+			
+		local append "append"
+	} 
+	
 		// T-TEST (Balance)
 		*	Unmatched Sample
 		*	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
