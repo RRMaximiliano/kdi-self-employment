@@ -38,7 +38,8 @@
 *** 0.2 Setting up folders
 	global dofiles		"${project}/dofiles"
 	global data			"${project}/data"
-	global outputs 		"${project}/outputs/tables"
+	global outputs		"${project}/outputs"
+	global tables 		"${project}/outputs/tables"
 	global figures		"${project}/outputs/figures"
 	
 	global emnv_2005	"${data}/raw/2005"
