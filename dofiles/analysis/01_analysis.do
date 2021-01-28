@@ -25,7 +25,6 @@
 	
 	global stars1	"label nolines nogaps fragment nomtitle nonumbers noobs nodep star(* 0.10 ** 0.05 *** 0.01) collabels(none) booktabs"
 	global stars2	"label nolines nogaps fragment nomtitle nonumbers nodep star(* 0.10 ** 0.05 *** 0.01) collabels(none) booktabs r2"	
-	global caliper = 0.01
 	
 	//	Table 1: Summary Statistics
 	local 	vars				///	
@@ -45,7 +44,7 @@
 	eststo clear 
 	estpost sum `vars' if selfemployment_1 == 1
 	
-	esttab 	using "${outputs}/desc_stats/tables/summ_stats_pooled.tex", replace					///	
+	esttab 	using "${tables}/summ_stats_pooled.tex", replace					///	
 			cells("count(fmt(%9.0fc)) mean(fmt(%9.2fc)) sd(fmt(%9.2fc)) min max") ${stars1}
 			
 			
@@ -55,7 +54,7 @@
 		eststo clear 
 		estpost sum `vars' if selfemployment_1 == 1 & year == `y'
 		
-		esttab 	using "${outputs}/desc_stats/tables/summ_stats_`y'.tex", replace			///	
+		esttab 	using "${tables}/summ_stats_`y'.tex", replace			///	
 				cells("count(fmt(%9.0fc)) mean(fmt(%9.2fc)) sd(fmt(%9.2fc)) min max") ${stars1}
 	}
 	
@@ -80,7 +79,7 @@
 		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
 		
 
-		esttab 	using "${outputs}/desc_stats/tables/parallel_trends.tex", replace ${stars2}	///
+		esttab 	using "${tables}/parallel_trends.tex", replace ${stars2}	///
 				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)
 	restore 
 	
@@ -104,7 +103,7 @@
 		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
 		
 
-		esttab 	using "${outputs}/desc_stats/tables/falsification.tex", replace ${stars2}	///
+		esttab 	using "${tables}/falsification.tex", replace ${stars2}	///
 				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)
 	restore
 	
@@ -123,7 +122,7 @@
 		label define _treated 	1"Eligibility" 0"Non", 	modify 
 		label define time 		0"Pre" 1"Post", 		modify
 		label values _treated _treated 
-		label values time time 		
+		label values time time 
 	
 		eststo clear 
 		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], 			 absorb(main_cat_1 dominio4) 			vce(cluster time_activity_1)
@@ -133,7 +132,7 @@
 		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if sex == 1, absorb(main_cat_1 dominio4) 			vce(cluster time_activity_1)
 		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if sex == 1, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)		
 		
-		esttab 	using "${outputs}/desc_stats/tables/main_did_gender.tex", replace ${stars2}				///
+		esttab 	using "${tables}/main_did_gender.tex", replace ${stars2}				///
 				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)		
 			
 
@@ -154,7 +153,7 @@
 		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if more_hs == 1 & sex == 0, 	absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
 		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if more_hs == 1 & sex == 1, 	absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)	
 		
-		esttab 	using "${outputs}/desc_stats/tables/main_did_educ.tex", replace ${stars2}				///
+		esttab 	using "${tables}/main_did_educ.tex", replace ${stars2}				///
 				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)			
 		
 	
@@ -170,13 +169,16 @@
 		
 		local vars "sex edu area age household_size"
 		eststo clear 		
-		eststo: reghdfe ln_real_income_1 time##sector `vars' [fw=_weight], 				absorb(dominio4 occup_1) 	vce(cluster time_activity_1)
-		eststo: reghdfe ln_real_income_1 time##sector `vars' [fw=_weight] if sex == 0,  absorb(dominio4 occup_1) 	vce(cluster time_activity_1)		
-		eststo: reghdfe ln_real_income_1 time##sector `vars' [fw=_weight] if sex == 1,  absorb(dominio4 occup_1) 	vce(cluster time_activity_1)		
+		eststo: reghdfe ln_real_income_1 time##sector [fw=_weight], 					  absorb(dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##sector `vars' [fw=_weight], 				  absorb(dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##sector [fw=_weight] 			if sex == 0,  absorb(dominio4 occup_1) 	vce(cluster time_activity_1)		
+		eststo: reghdfe ln_real_income_1 time##sector `vars' [fw=_weight] 	if sex == 0,  absorb(dominio4 occup_1) 	vce(cluster time_activity_1)		
+		eststo: reghdfe ln_real_income_1 time##sector [fw=_weight] 			if sex == 1,  absorb(dominio4 occup_1) 	vce(cluster time_activity_1)		
+		eststo: reghdfe ln_real_income_1 time##sector `vars' [fw=_weight] 	if sex == 1,  absorb(dominio4 occup_1) 	vce(cluster time_activity_1)
 		
-		esttab 	using "${outputs}/desc_stats/tables/main_did_sector.tex", replace ${stars2}				///
+		esttab 	using "${tables}/main_did_sector.tex", replace ${stars2}				///
 				keep(1.time 1.sector 2.sector 3.sector 4.sector 5.sector 1.time#1.sector 1.time#2.sector 1.time#3.sector 1.time#4.sector 1.time#5.sector) ///
-				order(1.time#1.sector 1.time#2.sector 1.time#3.sector 1.time#4.sector 1.time#5.sector 1.time 1.sector 2.sector 3.sector 4.sector 5.sector) ///
+				order(1.time#1.sector 1.time#2.sector 1.time#3.sector 1.time#4.sector 1.time#5.sector 1.time 1.sector 2.sector 3.sector 4.sector 5.sector) 
 				
 		// Table 8: Winsorizing
 		winsor2 ln_real_income_1, cuts(1 99) suffix(_win) label
@@ -191,10 +193,9 @@
 		eststo: reghdfe ln_real_income_1_win2 time##_treated `vars' [fw=_weight] if sex == 0, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
 		eststo: reghdfe ln_real_income_1_win2 time##_treated `vars' [fw=_weight] if sex == 1, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)		
 		
-		esttab 	using "${outputs}/desc_stats/tables/main_did_gender_win.tex", replace ${stars2}				///
+		esttab 	using "${tables}/main_did_gender_win.tex", replace ${stars2}				///
 				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)	
 
-		
 		
 		// Figures
 		
@@ -239,7 +240,7 @@
 		eststo: reghdfe working_months_1 	time##_treated `vars' [fw=_weight], absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
 		eststo: reghdfe n_jobs				time##_treated `vars' [fw=_weight], absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
 
-		esttab 	using "${outputs}/desc_stats/tables/main_did_other_outcomes.tex", replace ${stars2}				///
+		esttab 	using "${tables}/main_did_other_outcomes.tex", replace ${stars2}				///
 				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)
 				
 		eststo clear 	
@@ -248,7 +249,7 @@
 		eststo: reghdfe working_months_1 	time##_treated `vars' [fw=_weight] if sex == 0, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
 		eststo: reghdfe n_jobs				time##_treated `vars' [fw=_weight] if sex == 0, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
 
-		esttab 	using "${outputs}/desc_stats/tables/main_did_other_outcomes_females.tex", replace ${stars2}				///
+		esttab 	using "${tables}/main_did_other_outcomes_females.tex", replace ${stars2}				///
 				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)				
 
 		eststo clear 	
@@ -257,43 +258,97 @@
 		eststo: reghdfe working_months_1 	time##_treated `vars' [fw=_weight] if sex == 1, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
 		eststo: reghdfe n_jobs				time##_treated `vars' [fw=_weight] if sex == 1, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
 
-		esttab 	using "${outputs}/desc_stats/tables/main_did_other_outcomes_males.tex", replace ${stars2}				///
+		esttab 	using "${tables}/main_did_other_outcomes_males.tex", replace ${stars2}				///
 				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)					
 		
 		
 		// T-TEST (Balance)
 		*	Unmatched Sample
 		*	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		local append "replace"
-		foreach x of var sex edu area age household_size {
-			eststo ttest1_`x': qui reg `x' if time==0 & eligibility_1==1 					/* Eligible */ 
-			eststo ttest0_`x': qui reg `x' if time==0 & eligibility_1==0 					/* Not Eligible */ 
-			eststo ttestc_`x': qui reg `x' eligibility_1 if time==0 						/* Combined */ 
+		
+		local 	vars 	///
+				sex 	///
+				edu 	///
+				area 	///
+				age 	///
+				household_size 
+		
+		estpost ttest `vars' if time == 0, by(eligibility_1) uneq
+		
+		//	Latex
+		matrix m1 = J(10,7,.)
+		matrix list m1 
 
-			#delimit ; 
-			esttab using "${outputs}/ttest.csv", `append' 
-			se(2) nonumbers noobs label mtitle("eligle" "not eligible" "diff") nonotes; 
-			#delimit cr 
+		// 	Unmatched sample
+		local i = 1 
+		local j = 2
+		foreach var in `vars' {
+			ttest `var' if time == 0, by(eligibility_1) uneq
 			
-			local append "append"
-			est clear 
+			matrix m1[`i',2] = round(`r(mu_1)', .01)
+			matrix m1[`i',3] = round(`r(mu_2)', .01)
+			matrix m1[`i',4] = round(`r(mu_1)' - `r(mu_2)', .01)
+			
+			matrix m1[`j',2]	= round(`r(sd_1)' / sqrt(`r(N_1)'), .01) 
+			matrix m1[`j',3]	= round(`r(sd_2)' / sqrt(`r(N_2)'), .01) 
+			matrix m1[`j',4]	= round(`r(se)', .01)
+			
+			local i = `i' + 2
+			local j = `j' + 2
 		}
 
-		*	Matched Sample
-		*	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		local append "replace"
-		
-		foreach x of var sex edu age area household_size{
-			eststo ttest1m_`x': qui reg `x' [fw=_weight] if time==0 & eligibility_1==1 	/* Eligible */ 
-			eststo ttest0m_`x': qui reg `x' [fw=_weight] if time==0 & eligibility_1==0 	/* Not Eligible */ 
-			eststo ttestcm_`x': qui reg `x' eligibility_1 [fw=_weight] if time==0 		/* Combined */ 
-
-			#delimit ; 
-			esttab using "${outputs}/ttest_matched.csv", `append' 
-			se(2) nonumbers noobs label mtitle("eligle" "not eligible" "diff") nonotes; 
-			#delimit cr 
-			local append "append" 
-			est clear 
+		//	Matched sample
+		local i = 1 
+		local j = 2
+		foreach var in `vars' {
+			reg `var' [fw=_weight] 			if time == 0 & _treated == 0
+			matrix m1[`i',5] = round(_b[_cons], .01)
+			matrix m1[`j',5] = round(_se[_cons], .01)
+			reg `var' [fw=_weight] 			if time == 0 & _treated == 1
+			matrix m1[`i',6] = round(_b[_cons], .01)
+			matrix m1[`j',6] = round(_se[_cons], .01)
+			reg `var' _treated [fw=_weight] if time == 0
+			matrix m1[`i',7] = round(_b[_treated], .01)
+			matrix m1[`j',7] = round(_se[_treated], .01)			
+						
+			local i = `i' + 2
+			local j = `j' + 2
 		}
 		
-	restore 		
+		matrix list m1
+		
+		clear
+		svmat m1, names(col) 
+		
+		tostring *, format("%9.2f") replace force
+		
+		foreach var of varlist c2-c7 {
+			forvalues x = 2(2)8 {
+				replace `var' = "(" + `var' + ")" if _n == `x' 
+			}
+		}
+		
+		//	Variables Column 1
+		replace c1 = "Sex" 							if _n == 1
+		replace c1 = "Years of education" 			if _n == 3
+		replace c1 = "Area of residencey: urban" 	if _n == 5 
+		replace c1 = "Age" 							if _n == 7
+		replace c1 = "Household size"				if _n == 9
+		
+		replace c1 = "" if c1 == "."
+		
+		replace c`c(k)' =  c`c(k)' + "\\"
+		foreach col of varlist c1-c6 {
+			replace `col' = `col' + "&"
+		}	
+
+		// Export to TeX
+		outsheet using "${tables}/balance.tex", 		////
+				 nonames noquote nolabel replace
+	
+	
+	restore
+	
+	
+	
+	

@@ -30,7 +30,7 @@
 *** ----------------------------------------------------------------------------
 		
 *** 0.1 Set file path
-	if inlist("`c(username)'","maximiliano","WB559559", "wb559559"){
+	if inlist("`c(username)'","maximiliano","Maximiliano", "WB559559", "wb559559"){
 		global project			"D:/Documents/GitHub/research-projects/kdi-self-employment"
 	} 
 	
@@ -48,10 +48,23 @@
 
 	global data_int 	"${data}/intermediate"
 	
+	global caliper = 0.01
+	if (${caliper}==0.01) {
+		global tables 	"${outputs}/desc_stats_cap_0_01/tables"
+	}
+	
+	if (${caliper}==0.001) {
+		global tables 	"${outputs}/desc_stats_cap_0_001/tables"
+	}	
+	
+	if (${caliper}==0.0001) {
+		global tables 	"${outputs}/desc_stats_cap_0_0001/tables"
+	}	
+	
 *** 0.0 Install required packages	
 	run "${dofiles}/programs/packages.do"	 
 
-	packages tabout ietoolkit winsor esttab nsplit esttab outreg2
+	packages tabout ietoolkit winsor2 esttab nsplit esttab outreg2 psmatch2 reghdfe ftools 
 	ieboilstart, version(15.1)
 	
 	
