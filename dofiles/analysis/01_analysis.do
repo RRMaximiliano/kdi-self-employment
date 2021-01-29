@@ -169,12 +169,12 @@
 		
 		local vars "sex edu area age household_size"
 		eststo clear 		
-		eststo: reghdfe ln_real_income_1 time##sector [fw=_weight], 					  absorb(dominio4 occup_1) 	vce(cluster time_activity_1)
-		eststo: reghdfe ln_real_income_1 time##sector `vars' [fw=_weight], 				  absorb(dominio4 occup_1) 	vce(cluster time_activity_1)
-		eststo: reghdfe ln_real_income_1 time##sector [fw=_weight] 			if sex == 0,  absorb(dominio4 occup_1) 	vce(cluster time_activity_1)		
-		eststo: reghdfe ln_real_income_1 time##sector `vars' [fw=_weight] 	if sex == 0,  absorb(dominio4 occup_1) 	vce(cluster time_activity_1)		
-		eststo: reghdfe ln_real_income_1 time##sector [fw=_weight] 			if sex == 1,  absorb(dominio4 occup_1) 	vce(cluster time_activity_1)		
-		eststo: reghdfe ln_real_income_1 time##sector `vars' [fw=_weight] 	if sex == 1,  absorb(dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reg ln_real_income_1 time##sector i.dominio4 i.occup_1 i.main_cat_1 		[fw=_weight], 				vce(cluster time_activity_1)
+		eststo: reg ln_real_income_1 time##sector i.dominio4 i.occup_1 i.main_cat_1 `vars' 	[fw=_weight], 				vce(cluster time_activity_1)
+		eststo: reg ln_real_income_1 time##sector i.dominio4 i.occup_1 i.main_cat_1 		[fw=_weight] if sex == 0, 	vce(cluster time_activity_1)
+		eststo: reg ln_real_income_1 time##sector i.dominio4 i.occup_1 i.main_cat_1 `vars' 	[fw=_weight] if sex == 0, 	vce(cluster time_activity_1)
+		eststo: reg ln_real_income_1 time##sector i.dominio4 i.occup_1 i.main_cat_1 		[fw=_weight] if sex == 1, 	vce(cluster time_activity_1)
+		eststo: reg ln_real_income_1 time##sector i.dominio4 i.occup_1 i.main_cat_1 `vars' 	[fw=_weight] if sex == 1, 	vce(cluster time_activity_1)		
 		
 		esttab 	using "${tables}/main_did_sector.tex", replace ${stars2}				///
 				keep(1.time 1.sector 2.sector 3.sector 4.sector 5.sector 1.time#1.sector 1.time#2.sector 1.time#3.sector 1.time#4.sector 1.time#5.sector) ///
