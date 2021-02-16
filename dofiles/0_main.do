@@ -48,7 +48,7 @@
 
 	global data_int 	"${data}/intermediate"
 	
-	global caliper = 0.00001
+	global caliper = 0.0001
 	
 	if (${caliper}==0.01) {
 		global tables 	"${outputs}/desc_stats_cap_0_01/tables"
@@ -66,9 +66,6 @@
 		global tables 	"${outputs}/desc_stats_cap_0_00001/tables"
 	}	
 	
-	else {
-		global tables "${outputs}/desc_stats_nopsm/tables"
-	} 
 	
 *** 0.0 Install required packages	
 	run "${dofiles}/programs/packages.do"	 

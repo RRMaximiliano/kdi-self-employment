@@ -16,17 +16,17 @@
 				Min				&
 				Max 			\\
 				\midrule
-				\multicolumn{6}{@{}l}{\textit{Panel A. 2014}}			\\	
-				\primitiveinput{tables/summ_stats_2014.tex} 
-				\midrule 
-				\multicolumn{6}{@{}l}{\textit{Panel B. 2009}}			\\				
-				\primitiveinput{tables/summ_stats_2009.tex}
-				\midrule
-				\multicolumn{6}{@{}l}{\textit{Panel C. 2005}}			\\			
+				\multicolumn{6}{@{}l}{\textit{Panel A. Overall (all years)}}		\\			
+				\primitiveinput{tables/summ_stats_pooled.tex} 			
+				\midrule						
+				\multicolumn{6}{@{}l}{\textit{Panel B. 2005}}			\\			
 				\primitiveinput{tables/summ_stats_2005.tex}	
-				\midrule
-				\multicolumn{6}{@{}l}{\textit{Panel D. Overall}}		\\			
-				\primitiveinput{tables/summ_stats_pooled.tex} 			 				
+				\midrule				
+				\multicolumn{6}{@{}l}{\textit{Panel C. 2009}}			\\				
+				\primitiveinput{tables/summ_stats_2009.tex}				
+				\midrule		 				
+				\multicolumn{6}{@{}l}{\textit{Panel D. 2014}}			\\	
+				\primitiveinput{tables/summ_stats_2014.tex} 				
 				\bottomrule
 			\end{tabular}
 			\begin{tablenotes}
@@ -77,7 +77,11 @@
 				(5)				&
 				(6)				\\
 				\midrule 
-				\input{tables/balance.tex} \\ [-3ex]
+				\multicolumn{6}{@{}l}{\textit{Panel A. Covariates}}						\\			
+				\primitiveinput{tables/balance_cov.tex} 			
+				\midrule						
+				\multicolumn{6}{@{}l}{\textit{Panel B. Pre-intervention outcome}}		\\			
+				\primitiveinput{tables/balance_out.tex}					
 				\bottomrule
 			\end{tabular}
 			\begin{tablenotes}
@@ -97,31 +101,32 @@
 	\centering 
 	\begin{adjustbox}{width=\linewidth}
 		\begin{threeparttable}
-			\caption{ Parallel Trends - Using sample 2005--2009}
+			\caption{ Parallel Trends - Using 2005--2009 samples}
 			\label{tab:summ_stats_pooled}
-			\begin{tabular}{@{}l*{4}{c}@{}}
+			\begin{tabular}{@{}l*{5}{c}@{}}
 				\toprule
 								&
-				\multicolumn{4}{c}{Dependent variable: Log of Real Income} \\ 
-				\cmidrule(l){2-5}
+				\multicolumn{5}{c}{Dependent variable: Log of Real Income} \\ 
+				\cmidrule(l){2-6}
 				Variables 		& 
 				(1)				&
 				(2)				&
 				(3)				&
-				(4)				\\
+				(4)				& 
+				(5)				\\
 				\midrule 
 				\primitiveinput{tables/parallel_trends.tex} \\
 				\midrule
-				Primary Activity Fixed Effects	& Yes & Yes	& Yes & Yes \\
-				Controls						& No  & Yes	& Yes & Yes \\
-				Regional Fixed Effects			& No  & No	& Yes & Yes	\\
-				Occupation Fixed Effects		& No  & No  & No  &	Yes	\\		 				
+				Controls						& No  	& Yes 	& Yes 	& Yes 	& Yes \\
+				Regional Fixed Effects			& No 	& No	& Yes	& Yes	& Yes \\
+				Occupation Fixed Effects		& No  	& No 	& No 	& Yes 	& Yes \\					
+				Primary Activity Fixed Effects	& No  	& No 	& No 	& No 	& Yes \\ 					
 				\bottomrule
 			\end{tabular}
 			\begin{tablenotes}
 				\setlength\labelsep{0pt}
 				\footnotesize
-				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.01 imposing common support. Standard errors clustered at time plus primarty activity level are shown in parentheses. We use only the 2005 and 2009 sample for the parallel trends exercise. The variable $\textrm{Post}$ is a dummy variable equal to 1 if year is 2009 and 0 otherwise. The unit of observation is an individual. The individual controls are sex, area of residence, years of education, age, household size, four regional fixed effects, eighteen primary activity fixed effects, and nine occupation fixed effects. Statistical significance at the 1, 5, 10\% levels are indicated by ***,**, and *, respectively.	
+				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.0001 imposing common support. Standard errors clustered at time plus primary activity level are shown in parentheses. We use only the 2005 and 2009 sample for the parallel trends exercise. The variable $\textrm{Post}$ is a dummy variable equal to 1 if year is 2009 and 0 otherwise. The unit of observation is an individual. The individual controls are sex, area of residence, years of education, age, household size, four regional fixed effects, eighteen primary activity fixed effects, and nine occupation fixed effects. Statistical significance at the 1, 5, 10\% levels are indicated by ***,**, and *, respectively.	
 			\end{tablenotes}
 		\end{threeparttable}
 	\end{adjustbox}
@@ -134,31 +139,32 @@
 	\centering 
 	\begin{adjustbox}{width=\linewidth}
 		\begin{threeparttable}
-			\caption{Falsification Test - Using only employed workers}
+			\caption{Falsification Test - Using only employed workers and 2009--2014 samples}
 			\label{tab:falsification}
-			\begin{tabular}{@{}l*{4}{c}@{}}
+			\begin{tabular}{@{}l*{5}{c}@{}}
 				\toprule
 								&
-				\multicolumn{4}{c}{Dependent variable: Log of Real Income} \\ 
-				\cmidrule(l){2-5}
+				\multicolumn{5}{c}{Dependent variable: Log of Real Income} \\ 
+				\cmidrule(l){2-6}
 				Variables 		& 
 				(1)				&
 				(2)				&
 				(3)				&
-				(4)				\\
+				(4)				& 
+				(5)				\\
 				\midrule 
 				\primitiveinput{tables/falsification.tex} \\
 				\midrule
-				Primary Activity Fixed Effects	& Yes & Yes	& Yes & Yes \\
-				Controls						& No  & Yes	& Yes & Yes \\
-				Regional Fixed Effects			& No  & No	& Yes & Yes	\\
-				Occupation Fixed Effects		& No  & No  & No  &	Yes	\\		 				
+				Controls						& No  	& Yes 	& Yes 	& Yes 	& Yes \\
+				Regional Fixed Effects			& No 	& No	& Yes	& Yes	& Yes \\
+				Occupation Fixed Effects		& No  	& No 	& No 	& Yes 	& Yes \\					
+				Primary Activity Fixed Effects	& No  	& No 	& No 	& No 	& Yes \\ 				
 				\bottomrule
 			\end{tabular}
 			\begin{tablenotes}
 				\setlength\labelsep{0pt}
 				\footnotesize
-				\item \textit{Notes}: This table reports OLS estimates of a matched sample of only employed workers. The matching estimator is single nearest-neighbour within a caliper of 0.01 imposing common support. Standard errors clustered at time plus primarty activity level are shown in parentheses. The unit of observation is an individual. The individual controls are sex, area of residence, years of education, age, household size, four regional fixed effects, eighteen primary activity fixed effects, and nine occupation fixed effects. Statistical significance at the 1, 5, 10\% levels are indicated by ***,**, and *, respectively.	
+				\item \textit{Notes}: This table reports OLS estimates of a matched sample of only employed workers. The matching estimator is single nearest-neighbour within a caliper of 0.01 imposing common support. Standard errors clustered at time plus primary activity level are shown in parentheses. The unit of observation is an individual. The individual controls are sex, area of residence, years of education, age, household size, four regional fixed effects, eighteen primary activity fixed effects, and nine occupation fixed effects. Statistical significance at the 1, 5, 10\% levels are indicated by ***,**, and *, respectively.	
 			\end{tablenotes}
 		\end{threeparttable}
 	\end{adjustbox}
@@ -175,43 +181,45 @@
 		\begin{threeparttable}
 			\caption{Impact of the program on real income}
 			\label{tab:main_did_gender}
-			\begin{tabular}{@{}l*{6}{c}@{}}
+			\begin{tabular}{@{}l*{9}{c}@{}}
 				\toprule
 								&
-				\multicolumn{6}{c}{Dependent variable: Log of Real Income} \\ 
-				\cmidrule(l){2-7}
+				\multicolumn{9}{c}{Dependent variable: Log of Real Income} \\ 
+				\cmidrule(l){2-10}
 								& 
-				\multicolumn{2}{c}{Overall}	& 
-				\multicolumn{2}{c}{Females} & 
-				\multicolumn{2}{c}{Males}	\\
-				\cmidrule(lr){2-3}
-				\cmidrule(lr){4-5}
-				\cmidrule(l){6-7}		
+				\multicolumn{3}{c}{Overall}	& 
+				\multicolumn{3}{c}{Females} & 
+				\multicolumn{3}{c}{Males}	\\
+				\cmidrule(lr){2-4}
+				\cmidrule(lr){5-7}
+				\cmidrule(l){8-10}	
 				Variables 		& 
 				(1)				&
 				(2)				&
 				(3)				&
 				(4)				& 
 				(5)				& 
-				(6)				\\
+				(6)				& 
+				(7)				& 
+				(8)				& 
+				(9)				\\
 				\midrule 
 				\primitiveinput{tables/main_did_gender.tex} \\
 				\midrule
-				Primary Activity Fixed Effects	& Yes & Yes	& Yes & Yes & Yes & Yes \\
-				Controls						& Yes & Yes	& Yes & Yes & Yes & Yes \\
-				Regional Fixed Effects			& Yes & Yes	& Yes & Yes	& Yes & Yes \\
-				Occupation Fixed Effects		& No  & Yes & No  &	Yes	& No  & Yes \\		 				
+				Controls						& No  	& Yes 	& Yes 	& No  & Yes & Yes & No  & Yes 	& Yes\\
+				Regional Fixed Effects			& No 	& Yes	& Yes	& No  & Yes & Yes & No  & Yes 	& Yes\\
+				Occupation Fixed Effects		& No  	& No 	& Yes 	& No  & No  & Yes & No  & No 	& Yes\\
+				Primary Activity Fixed Effects	& No  	& No 	& Yes 	& No  & No  & Yes & No  & No 	& Yes\\				 
 				\bottomrule
 			\end{tabular}
 			\begin{tablenotes}
 				\setlength\labelsep{0pt}
 				\footnotesize
-				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.01 imposing common support. Standard errors clustered at time plus primarty activity level are shown in parentheses. The unit of observation is an individual. The individual controls are sex, area of residence, years of education, age, household size, four regional fixed effects, eighteen primary activity fixed effects, and nine occupation fixed effects. Statistical significance at the 1, 5, 10\% levels are indicated by ***,**, and *, respectively.				
+				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.0001 imposing common support. Standard errors clustered at time plus primary activity level are shown in parentheses. The unit of observation is an individual. The individual controls are sex, area of residence, years of education, age, household size, four regional fixed effects, eighteen primary activity fixed effects, and nine occupation fixed effects. Statistical significance at the 1, 5, 10\% levels are indicated by ***,**, and *, respectively.				
 			\end{tablenotes}
 		\end{threeparttable}
 	\end{adjustbox}
 \end{table}
-
 
 %-----------------------------------------------------------------
 % Tab 5
@@ -228,11 +236,15 @@
 				\toprule
 								&
 				\multicolumn{9}{c}{Dependent variable: Log of Real Income} \\ 
-				\cmidrule(l){2-9}
+				\cmidrule(l){2-10}
 								& 
-				\multicolumn{3}{c}{Primary}		& 
-				\multicolumn{3}{c}{High-school} & 
-				\multicolumn{3}{c}{Above high-school}	\\
+				\multicolumn{3}{c}{Primary completed}		& 
+				\multicolumn{3}{c}{Secondary completed} 	& 
+				\multicolumn{3}{c}{Above secondary}			\\
+								&
+				\multicolumn{3}{c}{or less}					& 
+				\multicolumn{3}{c}{or less} 				& 
+				\multicolumn{3}{c}{school}					\\				
 				\cmidrule(lr){2-4}
 				\cmidrule(lr){5-7}
 				\cmidrule(l){8-10}	
@@ -259,16 +271,16 @@
 				\midrule 
 				\primitiveinput{tables/main_did_educ.tex} \\
 				\midrule
-				Primary Activity Fixed Effects	& Yes & Yes	& Yes & Yes & Yes & Yes & Yes & Yes & Yes \\
-				Controls						& Yes & Yes	& Yes & Yes & Yes & Yes & Yes & Yes & Yes \\
-				Regional Fixed Effects			& Yes & Yes	& Yes & Yes	& Yes & Yes & Yes & Yes & Yes \\
-				Occupation Fixed Effects		& Yes & Yes & Yes &	Yes	& Yes & Yes & Yes & Yes & Yes \\
+				Controls						& Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes & Yes  & Yes 	& Yes\\
+				Regional Fixed Effects			& Yes 	& Yes	& Yes	& Yes  & Yes  & Yes & Yes  & Yes 	& Yes\\
+				Occupation Fixed Effects		& Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes & Yes  & Yes 	& Yes\\
+				Primary Activity Fixed Effects	& Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes & Yes  & Yes 	& Yes\\ 
 				\bottomrule
 			\end{tabular}
 			\begin{tablenotes}
 				\setlength\labelsep{0pt}
 				\footnotesize
-				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.01 imposing common support. Standard errors clustered at time plus primarty activity level are shown in parentheses. The unit of observation is an individual. The individual controls are sex, area of residence, years of education, age, household size, four regional fixed effects, eighteen primary activity fixed effects, and nine occupation fixed effects. Statistical significance at the 1, 5, 10\% levels are indicated by ***,**, and *, respectively.	
+				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.0001 imposing common support. Standard errors clustered at time plus primary activity level are shown in parentheses. The unit of observation is an individual. The individual controls are sex, area of residence, years of education, age, household size, four regional fixed effects, eighteen primary activity fixed effects, and nine occupation fixed effects. Statistical significance at the 1, 5, 10\% levels are indicated by ***,**, and *, respectively.	
 			\end{tablenotes}
 		\end{threeparttable}
 	\end{adjustbox}
@@ -306,16 +318,16 @@
 				\midrule 
 				\primitiveinput{tables/main_did_sector.tex} \\
 				\midrule
-				Controls						& No   & Yes	& No   & Yes & No   & Yes \\
-				Primary Activity Fixed Effects	& Yes  & Yes	& Yes  & Yes & Yes  & Yes \\
-				Regional Fixed Effects			& Yes  & Yes	& Yes  & Yes & Yes  & Yes \\
-				Occupation Fixed Effects		& Yes  & Yes  	& Yes  & Yes & Yes  & Yes \\		 				
+				Controls						& Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes 	\\
+				Regional Fixed Effects			& Yes 	& Yes	& Yes	& Yes  & Yes  & Yes 	\\
+				Occupation Fixed Effects		& No  	& Yes 	& No 	& Yes  & No   & Yes 	\\
+				Primary Activity Fixed Effects	& No  	& Yes 	& No 	& Yes  & No   & Yes 	\\				 		 				
 				\bottomrule
 			\end{tabular}
 			\begin{tablenotes}
 				\setlength\labelsep{0pt}
 				\footnotesize
-				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.01 imposing common support. Standard errors clustered at time plus primarty activity level are shown in parentheses. The unit of observation is an individual. The individual controls are sex, area of residence, years of education, age, household size, four regional fixed effects, eighteen primary activity fixed effects, and nine occupation fixed effects. Statistical significance at the 1, 5, 10\% levels are indicated by ***,**, and *, respectively.	
+				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.0001 imposing common support. Standard errors clustered at time plus primary activity level are shown in parentheses. The unit of observation is an individual. The individual controls are sex, area of residence, years of education, age, household size, four regional fixed effects, eighteen primary activity fixed effects, and nine occupation fixed effects. Statistical significance at the 1, 5, 10\% levels are indicated by ***,**, and *, respectively.	
 			\end{tablenotes}
 		\end{threeparttable}
 	\end{adjustbox}
@@ -360,16 +372,16 @@
 				\midrule 
 				\primitiveinput{tables/main_did_gender_win.tex} \\
 				\midrule
-				Primary Activity Fixed Effects	& Yes & Yes	& Yes & Yes & Yes & Yes \\
 				Controls						& Yes & Yes	& Yes & Yes & Yes & Yes \\
-				Regional Fixed Effects			& Yes & Yes	& Yes & Yes	& Yes & Yes \\
-				Occupation Fixed Effects		& Yes & Yes & Yes &	Yes	& Yes & Yes \\		 				
+				Regional Fixed Effects			& Yes & Yes	& Yes & Yes & Yes & Yes \\
+				Occupation Fixed Effects		& Yes & Yes & Yes &	Yes	& Yes & Yes \\
+				Primary Activity Fixed Effects	& Yes & Yes	& Yes & Yes	& Yes & Yes \\						 				
 				\bottomrule
 			\end{tabular}
 			\begin{tablenotes}
 				\setlength\labelsep{0pt}
 				\footnotesize
-				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.01 imposing common support. Standard errors clustered at time plus primarty activity level are shown in parentheses. The unit of observation is an individual. The individual controls are sex, area of residence, years of education, age, household size, four regional fixed effects, eighteen primary activity fixed effects, and nine occupation fixed effects. Statistical significance at the 1, 5, 10\% levels are indicated by ***,**, and *, respectively.	
+				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.0001 imposing common support. Standard errors clustered at time plus primary activity level are shown in parentheses. The unit of observation is an individual. The individual controls are sex, area of residence, years of education, age, household size, four regional fixed effects, eighteen primary activity fixed effects, and nine occupation fixed effects. Statistical significance at the 1, 5, 10\% levels are indicated by ***,**, and *, respectively.	
 			\end{tablenotes}
 		\end{threeparttable}
 	\end{adjustbox}
@@ -405,25 +417,94 @@
 				(3)				&
 				(4)				\\
 				\midrule 
-				\multicolumn{5}{@{}l}{\textit{Panel A. Overall}}		\\				
-				\primitiveinput{tables/main_did_other_outcomes.tex} 	\\
+				\multicolumn{5}{@{}l}{\textit{Panel A. Overall}}				\\				
+				\primitiveinput{tables/main_did_other_outcomes.tex} 			\\ [-1em]
 				\midrule
-				\multicolumn{5}{@{}l}{\textit{Panel A. Overall}}		\\	
-				\primitiveinput{tables/main_did_other_outcomes_females.tex} \\
+				\multicolumn{5}{@{}l}{\textit{Panel B. Females}}				\\	
+				\primitiveinput{tables/main_did_other_outcomes_females.tex} 	\\ [-1em]
 				\midrule
-				\multicolumn{5}{@{}l}{\textit{Panel C. Males}}			\\
-				\primitiveinput{tables/main_did_other_outcomes_males.tex} \\
+				\multicolumn{5}{@{}l}{\textit{Panel C. Males}}					\\
+				\primitiveinput{tables/main_did_other_outcomes_males.tex} 		\\ [-1em]
 				\midrule			
-				Primary Activity Fixed Effects	& Yes  & Yes	& Yes  & Yes \\
-				Controls						& Yes  & Yes	& Yes  & Yes \\
-				Regional Fixed Effects			& Yes  & Yes	& Yes  & Yes	\\
-				Occupation Fixed Effects		& Yes  & Yes    & Yes  &	Yes	\\		 				
+				Controls						& Yes & Yes	& Yes & Yes \\
+				Regional Fixed Effects			& Yes & Yes	& Yes & Yes \\
+				Occupation Fixed Effects		& Yes & Yes & Yes &	Yes	\\
+				Primary Activity Fixed Effects	& Yes & Yes	& Yes & Yes	\\						 				
 				\bottomrule
 			\end{tabular}
 			\begin{tablenotes}
 				\setlength\labelsep{0pt}
 				\footnotesize
-				\item \textit{Notes}: The table reports OLS estimates. Standard errors clustered at the time plus primarty activity level are shown in parentheses. The unit of observation is an individual. The individual controls are sex, area of residence, years of education, age, household size, four regional fixed effects, eighteen primary activity fixed effects, and nine occupation fixed effects. Statistical significance at the 1, 5, 10\% levels are indicated by ***,**, and *, respectively.
+				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.0001 imposing common support. Standard errors clustered at the time plus primary activity level are shown in parentheses. The unit of observation is an individual. The individual controls are sex, area of residence, years of education, age, household size, four regional fixed effects, eighteen primary activity fixed effects, and nine occupation fixed effects. Statistical significance at the 1, 5, 10\% levels are indicated by ***,**, and *, respectively.
+			\end{tablenotes}
+		\end{threeparttable}
+	\end{adjustbox}
+\end{table}
+
+%-----------------------------------------------------------------
+% Tab 10
+%-----------------------------------------------------------------
+\begin{table}[H]
+	\centering 
+	\begin{adjustbox}{max width=\textheight}
+		\begin{threeparttable}
+			\caption{Impact of the program on other outcomes}
+			\label{tab:other_outcomes_gender}
+			\begin{tabular}{@{}l*{4}{c}@{}}
+				\toprule
+								&
+				\multicolumn{4}{c}{Dependent variable:} \\ 
+								&
+				Received		&
+				Weekly hours	&
+				Months			& 
+				Probability of	\\
+								&
+				training		&
+				worked			&
+				worked			&
+				having a 2nd job \\				
+				\cmidrule(l){2-5}
+				Variables 		& 
+				(1)				&
+				(2)				&
+				(3)				&
+				(4)				\\
+				\midrule 
+				\multicolumn{5}{@{}l}{\textit{Panel A. Overall}}							\\	
+				\multicolumn{5}{@{}l}{\textbf{1. Primary completed or less}}				\\					
+				\primitiveinput{tables/main_did_other_outcomes_primary.tex} 				\\ [-1em]
+				\multicolumn{5}{@{}l}{\textbf{2. Secondary completed or less}}				\\					
+				\primitiveinput{tables/main_did_other_outcomes_high_school.tex} 			\\ [-1em]
+				\multicolumn{5}{@{}l}{\textbf{3. Above secondary school}}					\\					
+				\primitiveinput{tables/main_did_other_outcomes_more_hs.tex} 				\\ [-1em]		
+				\midrule
+				\multicolumn{5}{@{}l}{\textit{Panel B. Females}}							\\ 
+				\multicolumn{5}{@{}l}{\textbf{1. Primary completed or less}}				\\					
+				\primitiveinput{tables/main_did_other_outcomes_primary_sex_0.tex} 			\\ [-1em]
+				\multicolumn{5}{@{}l}{\textbf{2. Secondary completed or less}}				\\					
+				\primitiveinput{tables/main_did_other_outcomes_high_school_sex_0.tex} 		\\ [-1em]
+				\multicolumn{5}{@{}l}{\textbf{3. Above secondary school}}					\\					
+				\primitiveinput{tables/main_did_other_outcomes_more_hs_sex_0.tex} 			\\ [-1em]
+				\midrule 
+				\multicolumn{5}{@{}l}{\textit{Panel C. Males}}								\\		
+				\multicolumn{5}{@{}l}{\textbf{1. Primary completed or less}}				\\					
+				\primitiveinput{tables/main_did_other_outcomes_primary_sex_1.tex} 			\\ [-1em]
+				\multicolumn{5}{@{}l}{\textbf{2. Secondary completed or less}}				\\					
+				\primitiveinput{tables/main_did_other_outcomes_high_school_sex_1.tex} 		\\ [-1em]
+				\multicolumn{5}{@{}l}{\textbf{3. Above secondary school}}					\\					
+				\primitiveinput{tables/main_did_other_outcomes_more_hs_sex_1.tex} 			\\ [-1em]						
+				\midrule			
+				Controls						& Yes & Yes	& Yes & Yes \\
+				Regional Fixed Effects			& Yes & Yes	& Yes & Yes \\
+				Occupation Fixed Effects		& Yes & Yes & Yes &	Yes	\\
+				Primary Activity Fixed Effects	& Yes & Yes	& Yes & Yes	\\						 				
+				\bottomrule
+			\end{tabular}
+			\begin{tablenotes}
+				\setlength\labelsep{0pt}
+				\footnotesize
+				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.0001 imposing common support. Standard errors clustered at the time plus primary activity level are shown in parentheses. The unit of observation is an individual. The individual controls are sex, area of residence, years of education, age, household size, four regional fixed effects, eighteen primary activity fixed effects, and nine occupation fixed effects. Statistical significance at the 1, 5, 10\% levels are indicated by ***,**, and *, respectively.
 			\end{tablenotes}
 		\end{threeparttable}
 	\end{adjustbox}

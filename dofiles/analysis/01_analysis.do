@@ -23,20 +23,20 @@
 *** Load dataset 
 	use "${data_int}/emnv_cuaen_eligibility.dta", clear 
 	
-	global stars1	"label nolines nogaps fragment nomtitle nonumbers noobs nodep star(* 0.10 ** 0.05 *** 0.01) collabels(none) booktabs"
-	global stars2	"label nolines nogaps fragment nomtitle nonumbers nodep star(* 0.10 ** 0.05 *** 0.01) collabels(none) booktabs r2"	
+	global stars1	"label nolines nogaps fragment nomtitle nonumbers noobs nodep star(* 0.10 ** 0.05 *** 0.01) collabels(none) booktabs b(3) se(3)"
+	global stars2	"label nolines nogaps fragment nomtitle nonumbers nodep star(* 0.10 ** 0.05 *** 0.01) collabels(none) booktabs r2 b(3) se(3)"	
 	
 	//	Table 1: Summary Statistics
 	local 	vars				///	
 			sex 				///
-			edu 				///
-			area 				///
-			age 				///
-			household_size 		///
-			real_income_1 		///
-			ln_real_income_1 	///
+			age					///
+			household_size		///
+			edu					///
+			area				///
+			real_income_1		///
 			eligibility_1
 		
+	label var sex				"Gender"
 	label var real_income_1		"Real income"
 	label var ln_real_income_1 	"Log of real income"
 	label var eligibility_1		"Eligibility (\%)"
@@ -45,8 +45,7 @@
 	estpost sum `vars' if selfemployment_1 == 1
 	
 	esttab 	using "${tables}/summ_stats_pooled.tex", replace					///	
-			cells("count(fmt(%9.0fc)) mean(fmt(%9.2fc)) sd(fmt(%9.2fc)) min max") ${stars1}
-			
+			cells("count(fmt(%9.0fc)) mean(fmt(2 1 2 2 2 %9.0fc 2)) sd(fmt(2 1 2 2 2 %9.0fc 2)) min max") ${stars1}
 			
 	// Summ stats per year	
 	local years "2005 2009 2014"
@@ -55,7 +54,7 @@
 		estpost sum `vars' if selfemployment_1 == 1 & year == `y'
 		
 		esttab 	using "${tables}/summ_stats_`y'.tex", replace			///	
-				cells("count(fmt(%9.0fc)) mean(fmt(%9.2fc)) sd(fmt(%9.2fc)) min max") ${stars1}
+			cells("count(fmt(%9.0fc)) mean(fmt(2 1 2 2 2 %9.0fc 2)) sd(fmt(2 1 2 2 2 %9.0fc 2)) min max") ${stars1}
 	}
 	
 	
@@ -73,10 +72,11 @@
 		label values time time 
 		
 		eststo clear 
-		eststo: reghdfe ln_real_income_1 time##_treated [fw=_weight], 		 absorb(main_cat_1) 					vce(cluster time_activity_1)
-		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], absorb(main_cat_1) 					vce(cluster time_activity_1)
-		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], absorb(main_cat_1 dominio4) 			vce(cluster time_activity_1)
-		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated [fw=_weight], 		 noabsorb 								vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], noabsorb 								vce(cluster time_activity_1)		
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], absorb(dominio4) 						vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], absorb(dominio4 occup_1) 				vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], absorb(dominio4 occup_1 main_cat_1) 	vce(cluster time_activity_1)
 		
 
 		esttab 	using "${tables}/parallel_trends.tex", replace ${stars2}	///
@@ -97,10 +97,11 @@
 		label values time time 
 		
 		eststo clear 
-		eststo: reghdfe ln_real_income_1 time##_treated [fw=_weight], 		 absorb(main_cat_1) 					vce(cluster time_activity_1)
-		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], absorb(main_cat_1) 					vce(cluster time_activity_1)
-		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], absorb(main_cat_1 dominio4) 			vce(cluster time_activity_1)
-		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated [fw=_weight], 		 noabsorb 								vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], noabsorb 								vce(cluster time_activity_1)		
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], absorb(dominio4) 						vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], absorb(dominio4 occup_1) 				vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], absorb(dominio4 occup_1 main_cat_1) 	vce(cluster time_activity_1)
 		
 
 		esttab 	using "${tables}/falsification.tex", replace ${stars2}	///
@@ -125,21 +126,24 @@
 		label values time time 
 	
 		eststo clear 
-		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], 			 absorb(main_cat_1 dominio4) 			vce(cluster time_activity_1)
-		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], 			 absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
-		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if sex == 0, absorb(main_cat_1 dominio4) 			vce(cluster time_activity_1)
-		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if sex == 0, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
-		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if sex == 1, absorb(main_cat_1 dominio4) 			vce(cluster time_activity_1)
-		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if sex == 1, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)		
-		
+		eststo: reghdfe ln_real_income_1 time##_treated [fw=_weight], 		 			 noabsorb 								vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], 			 absorb(dominio4) 						vce(cluster time_activity_1)		
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], 			 absorb(dominio4 occup_1 main_cat_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated [fw=_weight] 		if sex == 0, noabsorb 								vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if sex == 0, absorb(dominio4) 						vce(cluster time_activity_1)		
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if sex == 0, absorb(dominio4 occup_1 main_cat_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated [fw=_weight] 		if sex == 1, noabsorb 								vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if sex == 1, absorb(dominio4) 						vce(cluster time_activity_1)		
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if sex == 1, absorb(dominio4 occup_1 main_cat_1) 	vce(cluster time_activity_1)		
+				
 		esttab 	using "${tables}/main_did_gender.tex", replace ${stars2}				///
 				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)		
 			
 
 		// Table 6: DID by education
-		gen primary = (edu> 0 & edu<=6) 	if !missing(edu)
+		gen primary 	= (edu> 0 & edu<=6) 	if !missing(edu)
 		gen high_school = (edu>6 & edu<=11) if !missing(edu)
-		gen more_hs = (edu>=11) 			if !missing(edu)
+		gen more_hs 	= (edu>=11) 			if !missing(edu)
 		
 		local vars "sex edu area age household_size"
 		eststo clear 		
@@ -169,15 +173,18 @@
 		
 		local vars "sex edu area age household_size"
 		eststo clear 		
-		eststo: reg ln_real_income_1 time##sector i.dominio4 i.occup_1 i.main_cat_1 		[fw=_weight], 				vce(cluster time_activity_1)
-		eststo: reg ln_real_income_1 time##sector i.dominio4 i.occup_1 i.main_cat_1 `vars' 	[fw=_weight], 				vce(cluster time_activity_1)
-		eststo: reg ln_real_income_1 time##sector i.dominio4 i.occup_1 i.main_cat_1 		[fw=_weight] if sex == 0, 	vce(cluster time_activity_1)
-		eststo: reg ln_real_income_1 time##sector i.dominio4 i.occup_1 i.main_cat_1 `vars' 	[fw=_weight] if sex == 0, 	vce(cluster time_activity_1)
-		eststo: reg ln_real_income_1 time##sector i.dominio4 i.occup_1 i.main_cat_1 		[fw=_weight] if sex == 1, 	vce(cluster time_activity_1)
-		eststo: reg ln_real_income_1 time##sector i.dominio4 i.occup_1 i.main_cat_1 `vars' 	[fw=_weight] if sex == 1, 	vce(cluster time_activity_1)		
-		
+		eststo: reg ln_real_income_1 time##sector `vars' i.dominio4							[fw=_weight], 				vce(cluster time_activity_1)	
+		eststo: reg ln_real_income_1 time##sector `vars' i.dominio4 i.main_cat_1 i.occup_1 	[fw=_weight], 				vce(cluster time_activity_1)	
+		eststo: reg ln_real_income_1 time##sector `vars' i.dominio4							[fw=_weight] if sex == 0, 	vce(cluster time_activity_1)	
+		eststo: reg ln_real_income_1 time##sector `vars' i.dominio4 i.main_cat_1 i.occup_1 	[fw=_weight] if sex == 0, 	vce(cluster time_activity_1)	
+		eststo: reg ln_real_income_1 time##sector `vars' i.dominio4							[fw=_weight] if sex == 1,  	vce(cluster time_activity_1)	
+		eststo: reg ln_real_income_1 time##sector `vars' i.dominio4 i.main_cat_1 i.occup_1 	[fw=_weight] if sex == 1, 	vce(cluster time_activity_1)			
+			
+			
+		areg ln_real_income_1 time##sector `vars' i.dominio4 i.occup_1 	[fw=_weight] if sex == 0, abs(sector)	vce(cluster time_activity_1)	
+	
 		esttab 	using "${tables}/main_did_sector.tex", replace ${stars2}				///
-				keep(1.time 1.sector 2.sector 3.sector 4.sector 5.sector 1.time#1.sector 1.time#2.sector 1.time#3.sector 1.time#4.sector 1.time#5.sector) ///
+				keep(1.time 1.sector 2.sector 3.sector 4.sector 5.sector 1.time#1.sector 1.time#2.sector 1.time#3.sector 1.time#4.sector 1.time#5.sector) 	///
 				order(1.time#1.sector 1.time#2.sector 1.time#3.sector 1.time#4.sector 1.time#5.sector 1.time 1.sector 2.sector 3.sector 4.sector 5.sector) 
 				
 		// Table 8: Winsorizing
@@ -196,7 +203,6 @@
 		esttab 	using "${tables}/main_did_gender_win.tex", replace ${stars2}				///
 				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)	
 
-		
 		// Figures
 		
 		// Kernel density
@@ -236,47 +242,118 @@
 		local vars "sex edu area age household_size"
 		eststo clear 	
 		eststo: reghdfe training 			time##_treated `vars' [fw=_weight], absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+			sum training if e(sample) == 1
+			estadd scalar mean = r(mean)
 		eststo: reghdfe hours 				time##_treated `vars' [fw=_weight], absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+			sum hours if e(sample) == 1
+			estadd scalar mean = r(mean)		
 		eststo: reghdfe working_months_1 	time##_treated `vars' [fw=_weight], absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+			sum working_months_1 if e(sample) == 1
+			estadd scalar mean = r(mean)		
 		eststo: reghdfe n_jobs				time##_treated `vars' [fw=_weight], absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+			sum n_jobs if e(sample) == 1
+			estadd scalar mean = r(mean)		
 
-		esttab 	using "${tables}/main_did_other_outcomes.tex", replace ${stars2}				///
-				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)
+		esttab 	using "${tables}/main_did_other_outcomes.tex", replace ${stars2}								///
+				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)			///
+				stat(mean, labels("Mean dependent variable"))	
 				
 		eststo clear 	
 		eststo: reghdfe training 			time##_treated `vars' [fw=_weight] if sex == 0, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+			sum training 	if e(sample) == 1 & sex == 0
+			estadd scalar mean = r(mean)
 		eststo: reghdfe hours 				time##_treated `vars' [fw=_weight] if sex == 0, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+			sum hours 		if e(sample) == 1 & sex == 0
+			estadd scalar mean = r(mean)
 		eststo: reghdfe working_months_1 	time##_treated `vars' [fw=_weight] if sex == 0, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+			sum working_months_1 if e(sample) == 1 & sex == 0
+			estadd scalar mean = r(mean)
 		eststo: reghdfe n_jobs				time##_treated `vars' [fw=_weight] if sex == 0, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
-
-		esttab 	using "${tables}/main_did_other_outcomes_females.tex", replace ${stars2}				///
-				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)				
+			sum n_jobs if e(sample) == 1 & sex == 0
+			estadd scalar mean = r(mean)
+			
+		esttab 	using "${tables}/main_did_other_outcomes_females.tex", replace ${stars2}						///
+				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)			///
+				stat(mean, labels("Mean dependent variable"))				
 
 		eststo clear 	
 		eststo: reghdfe training 			time##_treated `vars' [fw=_weight] if sex == 1, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+			sum training 	if e(sample) == 1 & sex == 1
+			estadd scalar mean = r(mean)
 		eststo: reghdfe hours 				time##_treated `vars' [fw=_weight] if sex == 1, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+			sum hours 		if e(sample) == 1 & sex == 1
+			estadd scalar mean = r(mean)
 		eststo: reghdfe working_months_1 	time##_treated `vars' [fw=_weight] if sex == 1, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+			sum working_months_1 if e(sample) == 1 & sex == 1
+			estadd scalar mean = r(mean)
 		eststo: reghdfe n_jobs				time##_treated `vars' [fw=_weight] if sex == 1, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+			sum n_jobs 		if e(sample) == 1 & sex == 1
+			estadd scalar mean = r(mean)
 
-		esttab 	using "${tables}/main_did_other_outcomes_males.tex", replace ${stars2}				///
-				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)					
+		esttab 	using "${tables}/main_did_other_outcomes_males.tex", replace ${stars2}							///
+				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)			///
+				stat(mean, labels("Mean dependent variable"))					
 		
+		// By Education
+		foreach var in primary high_school more_hs { 
+			eststo clear 
+			eststo: reghdfe training 			time##_treated `vars' [fw=_weight] if `var' == 1, absorb(main_cat_1 dominio4 occup_1) vce(cluster time_activity_1)
+				sum training if e(sample) == 1 & `var' == 1
+				estadd scalar mean = r(mean)
+			eststo: reghdfe hours 				time##_treated `vars' [fw=_weight] if `var' == 1, absorb(main_cat_1 dominio4 occup_1) vce(cluster time_activity_1)
+				sum hours if e(sample) == 1 & `var' == 1
+				estadd scalar mean = r(mean)
+			eststo: reghdfe working_months_1 	time##_treated `vars' [fw=_weight] if `var' == 1, absorb(main_cat_1 dominio4 occup_1) vce(cluster time_activity_1)
+				sum working_months_1 if e(sample) == 1 & `var' == 1
+				estadd scalar mean = r(mean)		
+			eststo: reghdfe n_jobs 				time##_treated `vars' [fw=_weight] if `var' == 1, absorb(main_cat_1 dominio4 occup_1) vce(cluster time_activity_1)		
+				sum n_jobs if e(sample) == 1 & `var' == 1
+				estadd scalar mean = r(mean)		
+				
+			esttab 	using "${tables}/main_did_other_outcomes_`var'.tex", replace ${stars2}						///
+					keep(1.time#1._treated) order(1.time#1._treated)											///
+					stat(mean, labels("Mean dependent variable"))				
+		}	
 		
+		// By Gender
+		foreach var in primary high_school more_hs { 
+			forvalues x = 0/1 {
+				eststo clear 
+				eststo: reghdfe training 			time##_treated `vars' [fw=_weight] if `var' == 1 & sex == `x', absorb(main_cat_1 dominio4 occup_1) vce(cluster time_activity_1)
+					sum training if e(sample) == 1 & `var' == 1 & sex == `x'
+					estadd scalar mean = r(mean)
+				eststo: reghdfe hours 				time##_treated `vars' [fw=_weight] if `var' == 1 & sex == `x', absorb(main_cat_1 dominio4 occup_1) vce(cluster time_activity_1)
+					sum hours if e(sample) == 1 & `var' == 1 & sex == `x'
+					estadd scalar mean = r(mean)
+				eststo: reghdfe working_months_1 	time##_treated `vars' [fw=_weight] if `var' == 1 & sex == `x', absorb(main_cat_1 dominio4 occup_1) vce(cluster time_activity_1)
+					sum working_months_1 if e(sample) == 1 & `var' == 1 & sex == `x'
+					estadd scalar mean = r(mean)		
+				eststo: reghdfe n_jobs 				time##_treated `vars' [fw=_weight] if `var' == 1 & sex == `x', absorb(main_cat_1 dominio4 occup_1) vce(cluster time_activity_1)		
+					sum n_jobs if e(sample) == 1 & `var' == 1 & sex == `x'
+					estadd scalar mean = r(mean)		
+					
+				esttab 	using "${tables}/main_did_other_outcomes_`var'_sex_`x'.tex", replace ${stars2}				///
+						keep(1.time#1._treated) order(1.time#1._treated)											///
+						stat(mean, labels("Mean dependent variable"))				
+				}
+		}
+						
+				
 		// T-TEST (Balance)
 		*	Unmatched Sample
 		*	~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-		
-		local 	vars 	///
-				sex 	///
-				edu 	///
-				area 	///
-				age 	///
-				household_size 
-		
+		local 	vars				///	
+				sex 				///
+				age					///
+				household_size		///
+				edu					///
+				area				///
+				real_income_1
+			
 		estpost ttest `vars' if time == 0, by(eligibility_1) uneq
 		
 		//	Latex
-		matrix m1 = J(10,7,.)
+		matrix m1 = J(12,7,.)
 		matrix list m1 
 
 		// 	Unmatched sample
@@ -323,17 +400,18 @@
 		tostring *, format("%9.2f") replace force
 		
 		foreach var of varlist c2-c7 {
-			forvalues x = 2(2)8 {
+			forvalues x = 2(2)`c(N)' {
 				replace `var' = "(" + `var' + ")" if _n == `x' 
 			}
 		}
 		
 		//	Variables Column 1
-		replace c1 = "Sex" 							if _n == 1
-		replace c1 = "Years of education" 			if _n == 3
-		replace c1 = "Area of residencey: urban" 	if _n == 5 
-		replace c1 = "Age" 							if _n == 7
-		replace c1 = "Household size"				if _n == 9
+		replace c1 = "Gender" 						if _n == 1
+		replace c1 = "Age" 							if _n == 3
+		replace c1 = "Household size" 				if _n == 5 
+		replace c1 = "Years of education" 			if _n == 7
+		replace c1 = "Area of residency: urban"		if _n == 9
+		replace c1 = "Real income" 					if _n == 11		
 		
 		replace c1 = "" if c1 == "."
 		
@@ -341,12 +419,19 @@
 		foreach col of varlist c1-c6 {
 			replace `col' = `col' + "&"
 		}	
-
+		
+		snapshot save
+		drop if _n >= 11 
 		// Export to TeX
-		outsheet using "${tables}/balance.tex", 		////
+		outsheet using "${tables}/balance_cov.tex", 		////
 				 nonames noquote nolabel replace
 	
-	
+		snapshot restore 1 
+		drop if _n < 11
+		// Export to TeX
+		outsheet using "${tables}/balance_out.tex", 		////
+				 nonames noquote nolabel replace
+				 
 	restore
 	
 	
