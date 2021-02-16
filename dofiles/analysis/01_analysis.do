@@ -165,10 +165,9 @@
 		recode 	cat_1									///
 				(2 6 13/18= 0)							///	
 				(1 = 1 "Agriculture and Forestry" )		///
-				(3/5 7 = 2 "Manufacture Industry") 		///
-				(8 = 3 "Construction") 					///
-				(9 10 11 = 4 "Commerce") 				///
-				(12 = 5 "Hotels and Restaurants"), 		///
+				(3/5 7 8 = 2 "Manufacture Industry and Construction") 		///
+				(9 10 11 = 3 "Commerce") 				///
+				(12 = 4 "Hotels and Restaurants"), 		///
 		gen(sector)
 		
 		local vars "sex edu area age household_size"
@@ -183,9 +182,9 @@
 			
 		areg ln_real_income_1 time##sector `vars' i.dominio4 i.occup_1 	[fw=_weight] if sex == 0, abs(sector)	vce(cluster time_activity_1)	
 	
-		esttab 	using "${tables}/main_did_sector.tex", replace ${stars2}				///
-				keep(1.time 1.sector 2.sector 3.sector 4.sector 5.sector 1.time#1.sector 1.time#2.sector 1.time#3.sector 1.time#4.sector 1.time#5.sector) 	///
-				order(1.time#1.sector 1.time#2.sector 1.time#3.sector 1.time#4.sector 1.time#5.sector 1.time 1.sector 2.sector 3.sector 4.sector 5.sector) 
+		esttab 	using "${tables}/main_did_sector.tex", replace ${stars2}															///
+				keep(1.time 1.sector 2.sector 3.sector 4.sector 1.time#1.sector 1.time#2.sector 1.time#3.sector 1.time#4.sector) 	///
+				order(1.time#1.sector 1.time#2.sector 1.time#3.sector 1.time#4.sector 1.time 1.sector 2.sector 3.sector 4.sector) 
 				
 		// Table 8: Winsorizing
 		winsor2 ln_real_income_1, cuts(1 99) suffix(_win) label
