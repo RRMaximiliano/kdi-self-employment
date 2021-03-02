@@ -80,7 +80,27 @@
 		
 
 		esttab 	using "${tables}/parallel_trends.tex", replace ${stars2}	///
-				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)
+				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)						
+
+		// Education
+		gen primary 	= (edu> 0 & edu<=6) 	if !missing(edu)
+		gen high_school = (edu> 6 & edu<=11) 	if !missing(edu)
+		gen more_hs 	= (edu>=11) 			if !missing(edu)
+		
+		local vars "sex edu area age household_size"
+		eststo clear 		
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if primary == 1, 				absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if primary == 1 & sex == 0,	 	absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if primary == 1 & sex == 1, 	absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if high_school == 1, 			absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if high_school == 1 & sex == 0, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if high_school == 1 & sex == 1, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if more_hs == 1, 				absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if more_hs == 1 & sex == 0, 	absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if more_hs == 1 & sex == 1, 	absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)	
+		
+		esttab 	using "${tables}/main_did_educ_parallel_trends.tex", replace ${stars2}				///
+				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)				
 	restore 
 	
 	// Table 3: Falsification Test
@@ -106,6 +126,26 @@
 
 		esttab 	using "${tables}/falsification.tex", replace ${stars2}	///
 				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)
+				
+		// Education
+		gen primary 	= (edu> 0 & edu<=6) 	if !missing(edu)
+		gen high_school = (edu> 6 & edu<=11) 	if !missing(edu)
+		gen more_hs 	= (edu>=11) 			if !missing(edu)
+		
+		local vars "sex edu area age household_size"
+		eststo clear 		
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if primary == 1, 				absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if primary == 1 & sex == 0,	 	absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if primary == 1 & sex == 1, 	absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if high_school == 1, 			absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if high_school == 1 & sex == 0, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if high_school == 1 & sex == 1, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if more_hs == 1, 				absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if more_hs == 1 & sex == 0, 	absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if more_hs == 1 & sex == 1, 	absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)	
+		
+		esttab 	using "${tables}/main_did_educ_falsification.tex", replace ${stars2}				///
+				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)					
 	restore
 	
 	
@@ -142,7 +182,7 @@
 
 		// Table 6: DID by education
 		gen primary 	= (edu> 0 & edu<=6) 	if !missing(edu)
-		gen high_school = (edu>6 & edu<=11) if !missing(edu)
+		gen high_school = (edu> 6 & edu<=11)	if !missing(edu)
 		gen more_hs 	= (edu>=11) 			if !missing(edu)
 		
 		local vars "sex edu area age household_size"
@@ -159,33 +199,7 @@
 		
 		esttab 	using "${tables}/main_did_educ.tex", replace ${stars2}				///
 				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)			
-		
-	
-		// Table 7: By Sector
-		recode 	cat_1									///
-				(2 6 13/18= 0)							///	
-				(1 = 1 "Agriculture and Forestry" )		///
-				(3/5 7 8 = 2 "Manufacture Industry and Construction") 		///
-				(9 10 11 = 3 "Commerce") 				///
-				(12 = 4 "Hotels and Restaurants"), 		///
-		gen(sector)
-		
-		local vars "sex edu area age household_size"
-		eststo clear 		
-		eststo: reg ln_real_income_1 time##sector `vars' i.dominio4							[fw=_weight], 				vce(cluster time_activity_1)	
-		eststo: reg ln_real_income_1 time##sector `vars' i.dominio4 i.main_cat_1 i.occup_1 	[fw=_weight], 				vce(cluster time_activity_1)	
-		eststo: reg ln_real_income_1 time##sector `vars' i.dominio4							[fw=_weight] if sex == 0, 	vce(cluster time_activity_1)	
-		eststo: reg ln_real_income_1 time##sector `vars' i.dominio4 i.main_cat_1 i.occup_1 	[fw=_weight] if sex == 0, 	vce(cluster time_activity_1)	
-		eststo: reg ln_real_income_1 time##sector `vars' i.dominio4							[fw=_weight] if sex == 1,  	vce(cluster time_activity_1)	
-		eststo: reg ln_real_income_1 time##sector `vars' i.dominio4 i.main_cat_1 i.occup_1 	[fw=_weight] if sex == 1, 	vce(cluster time_activity_1)			
-			
-			
-		areg ln_real_income_1 time##sector `vars' i.dominio4 i.occup_1 	[fw=_weight] if sex == 0, abs(sector)	vce(cluster time_activity_1)	
-	
-		esttab 	using "${tables}/main_did_sector.tex", replace ${stars2}															///
-				keep(1.time 1.sector 2.sector 3.sector 4.sector 1.time#1.sector 1.time#2.sector 1.time#3.sector 1.time#4.sector) 	///
-				order(1.time#1.sector 1.time#2.sector 1.time#3.sector 1.time#4.sector 1.time 1.sector 2.sector 3.sector 4.sector) 
-				
+					
 		// Table 8: Winsorizing
 		winsor2 ln_real_income_1, cuts(1 99) suffix(_win) label
 		winsor2 ln_real_income_1, cuts(10 90) suffix(_win2) label
