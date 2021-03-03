@@ -1,29 +1,27 @@
 /********************************************************************************
 * PROJECT:	Self-Employment - Nicaragua                                 
-* TITLE: 	
+* TITLE: 	emnv_2014_population
 * YEAR:		2021
 *********************************************************************************
 	
 *** Outline:
-	0. Set initial configurations and globals
-	1. Cleaning 
-	2. Appending Datasets (Baseline and FUP1)
-	3. Construction 
-	4. Tables -- Regressions
-	5. Figures
+	1. Load data
+	2, Generate variables
+	3. Keep and order variables
+	4. Save dataset
 
-*** Programs:
-	1. iebaltab2
-	2. packages
+*** Requires:
+	1. EMNV14-04 POBLACION.dta
+	
+*** Output:
+	1. emnv_14_pop.dta
 
-*********************************************************************************
-*	PART 0: Set initial configurations and globals
 ********************************************************************************/
 
-*** Load data
+*** 1. Load data
 	use "${emnv_2014}/EMNV14-04 POBLACION.dta", clear
 	
-*** Generate variables
+*** 2. Generate variables
 	// Area
 	gen area = (i06 == 1) 
 	label var area "Area of residency: urban"
@@ -312,7 +310,7 @@
 	rename peso2 Peso2
 	rename peso3 Peso3 
 	
-*** Keep variables
+*** 3. Keep variables
 	keep 	i00				///
 			time 			///
 			year			///
@@ -403,5 +401,5 @@
 			dominio4 		///
 			Peso* 
 		
-*** Save dataset
+*** 4. Save dataset
 	save "${data_int}/emnv_14_pop.dta", replace 
