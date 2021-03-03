@@ -53,7 +53,7 @@
 	// To install all the required programs
 	run "${dofiles}/programs/packages.do"	 
 
-	packages ietoolkit winsor2 esttab nsplit esttab psmatch2 reghdfe ftools 
+	packages ietoolkit winsor2 nsplit esttab psmatch2 reghdfe 
 	ieboilstart, version(15.1)
 	
 	// TvsC to create comparison between eligible and non elitgible groups
