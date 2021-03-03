@@ -1,27 +1,23 @@
 /********************************************************************************
 * PROJECT:	Self-Employment - Nicaragua                                 
-* TITLE: 	
+* TITLE: 	Appending datasets
 * YEAR:		2021
 *********************************************************************************
 	
 *** Outline:
-	0. Set initial configurations and globals
-	1. Cleaning 
-	2. Appending Datasets (Baseline and FUP1)
-	3. Construction 
-	4. Tables -- Regressions
-	5. Figures
-
-*** Programs:
-	1. iebaltab2
-	2. packages
-
+	1. Load data
+	2. Append and save data
+	
 *********************************************************************************
-*	PART 0: Set initial configurations and globals
+*	PART 1: Load data
 ********************************************************************************/
 
-*** Load first dataset
+*** Load dataset
 	use "${data_int}/emnv_05_pop.dta", clear 
+	
+*********************************************************************************
+*	PART 2: Append and save data
+********************************************************************************/
 	
 *** Append dataset
 	append using "${data_int}/emnv_09_pop.dta"
