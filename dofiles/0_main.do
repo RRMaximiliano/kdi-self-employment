@@ -60,10 +60,10 @@
 	run "${dofiles}/programs/tvsc.do"	
 	
 *** 0.5 Execution globals
-	global cleaning 	1
-	global append_dta	1
-	global construct	1
-	global analysis		1
+	global cleaning 	0
+	global append_dta	0
+	global construct	0
+	global analysis		0
 	
 	set scheme s1color 	
 	

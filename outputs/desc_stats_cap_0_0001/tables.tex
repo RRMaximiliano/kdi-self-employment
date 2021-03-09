@@ -236,42 +236,70 @@
 		\end{threeparttable}
 	\end{adjustbox}
 \end{table}
-\end{landscape}
+
 %-----------------------------------------------------------------
 % Tab 6
 %-----------------------------------------------------------------
 \begin{table}[H]
 	\centering 
-	\begin{threeparttable}
-		\caption{Falsification test on paid-employed workers between 2009 and 2014}
-		\label{tab:falsification}
-		\begin{tabular}{@{}l*{5}{c}@{}}
-			\toprule
-							&
-			\multicolumn{5}{c}{Dependent variable: Log of Real Income} \\ 
-			\cmidrule(l){2-6}
-			Variables 		& 
-			(1)				&
-			(2)				&
-			(3)				&
-			(4)				& 
-			(5)				\\
-			\midrule 
-			\primitiveinput{tables/falsification.tex} \\
-			\midrule
-			Controls						& No  	& Yes 	& Yes 	& Yes 	& Yes \\
-			Regional Fixed Effects			& No 	& No	& Yes	& Yes	& Yes \\
-			Occupation Fixed Effects		& No  	& No 	& No 	& Yes 	& Yes \\					
-			Primary Activity Fixed Effects	& No  	& No 	& No 	& No 	& Yes \\ 				
-			\bottomrule
-		\end{tabular}
-		\begin{tablenotes}
-			\setlength\labelsep{0pt}
-			\footnotesize
-			\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.0001 imposing common support. We use the sample of paid- employed workers from 2009 and 2014 LSMS for the falsification test. Post is a dummy variable equal to 1 if year is 2014 and 0 if year is 2009. Eligibility is a dummy variable equal to 1 if individuals are eligible for the SBFE program and 0 otherwise. Controls include gender, age, household size, years of education, and area of residence, four regional fixed effects, nine occupation fixed effects, and eighteen primary activity fixed effects. Robust standard errors clustered at the year times eighteen primary economic sectors are shown in parentheses. *** p<0.01, ** p<0.05, * p<0.1.
-		\end{tablenotes}
-	\end{threeparttable}
+	\begin{adjustbox}{width=\linewidth}
+		\begin{threeparttable}
+			\caption{Falsification test on paid-employed workers between 2009 and 2014}
+			\label{tab:main_did_education}
+			\begin{tabular}{@{}l*{9}{c}@{}}
+				\toprule
+								&
+				\multicolumn{9}{c}{Dependent variable: Log of Real Income} \\ 
+				\cmidrule(l){2-10}
+								& 
+				\multicolumn{3}{c}{Primary completed}		& 
+				\multicolumn{3}{c}{Secondary completed} 	& 
+				\multicolumn{3}{c}{Above secondary}			\\
+								&
+				\multicolumn{3}{c}{or less}					& 
+				\multicolumn{3}{c}{or less} 				& 
+				\multicolumn{3}{c}{school}					\\				
+				\cmidrule(lr){2-4}
+				\cmidrule(lr){5-7}
+				\cmidrule(l){8-10}	
+								&
+				Overall 		& 
+				Females 		& 
+				Males			& 
+				Overall 		& 
+				Females 		& 
+				Males			& 
+				Overall 		& 
+				Females 		& 
+				Males			\\								
+				Variables 		& 
+				(1)				&
+				(2)				&
+				(3)				&
+				(4)				& 
+				(5)				& 
+				(6)				& 
+				(7)				& 
+				(8)				& 
+				(9)				\\
+				\midrule 
+				\primitiveinput{tables/main_did_educ_falsification.tex} \\
+				\midrule
+				Controls						& Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes & Yes  & Yes 	& Yes\\
+				Regional Fixed Effects			& Yes 	& Yes	& Yes	& Yes  & Yes  & Yes & Yes  & Yes 	& Yes\\
+				Occupation Fixed Effects		& Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes & Yes  & Yes 	& Yes\\
+				Primary Activity Fixed Effects	& Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes & Yes  & Yes 	& Yes\\ 
+				\bottomrule
+			\end{tabular}
+			\begin{tablenotes}
+				\setlength\labelsep{0pt}
+				\footnotesize
+				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.0001 imposing common support. We use the sample of paid- employed workers from 2009 and 2014 LSMS for the falsification test. Post is a dummy variable equal to 1 if year is 2014 and 0 if year is 2009. Eligibility is a dummy variable equal to 1 if individuals are eligible for the SBFE program and 0 otherwise. Controls include gender, age, household size, years of education, and area of residence, four regional fixed effects, nine occupation fixed effects, and eighteen primary activity fixed effects. Robust standard errors clustered at the year times eighteen primary economic sectors are shown in parentheses. *** p<0.01, ** p<0.05, * p<0.1.
+			\end{tablenotes}
+		\end{threeparttable}
+	\end{adjustbox}
 \end{table}
+\end{landscape}
 %-----------------------------------------------------------------
 % Tab 7
 %-----------------------------------------------------------------

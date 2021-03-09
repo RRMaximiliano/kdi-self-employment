@@ -92,7 +92,7 @@
 				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)										
 	restore 
 	
-*** 2.3 	Table 6: Falsification Test
+*** 2.3 	Table 6: Falsification Test by education only paid employed workers
 	preserve 
 		keep if employed_1 == 1 
 		recode time (1=0) (2=1)
@@ -104,18 +104,26 @@
 		label define time 		0"Pre" 1"Post", 		modify
 		label values _treated _treated 
 		label values time time 
+						
+		// Generate education variables
+		gen primary 	= (edu> 0 & edu<=6) 	if !missing(edu)
+		gen high_school = (edu> 6 & edu<=11)	if !missing(edu)
+		gen more_hs 	= (edu>=11) 			if !missing(edu)
 		
-		eststo clear 
-		eststo: reghdfe ln_real_income_1 time##_treated [fw=_weight], 		 noabsorb 								vce(cluster time_activity_1)
-		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], noabsorb 								vce(cluster time_activity_1)		
-		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], absorb(dominio4) 						vce(cluster time_activity_1)
-		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], absorb(dominio4 occup_1) 				vce(cluster time_activity_1)
-		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight], absorb(dominio4 occup_1 main_cat_1) 	vce(cluster time_activity_1)
+		local vars "sex edu area age household_size"
+		eststo clear 		
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if primary == 1, 				absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if primary == 1 & sex == 0,	 	absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if primary == 1 & sex == 1, 	absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if high_school == 1, 			absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if high_school == 1 & sex == 0, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if high_school == 1 & sex == 1, absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if more_hs == 1, 				absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if more_hs == 1 & sex == 0, 	absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)
+		eststo: reghdfe ln_real_income_1 time##_treated `vars' [fw=_weight] if more_hs == 1 & sex == 1, 	absorb(main_cat_1 dominio4 occup_1) 	vce(cluster time_activity_1)	
 		
-		// Esttab export
-		esttab 	using "${tables}/falsification.tex", replace ${stars2}	///
-				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)
-				
+		esttab 	using "${tables}/main_did_educ_falsification.tex", replace ${stars2}					///
+				keep(1.time 1._treated 1.time#1._treated) order(1.time#1._treated 1.time 1._treated)				
 	restore
 	
 *** 2.4 	Table 4: Main Differences in Differences
