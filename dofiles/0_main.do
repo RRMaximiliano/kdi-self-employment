@@ -25,7 +25,7 @@
 ********************************************************************************/
 		
 *** 0.1 Set file path
-	if inlist("`c(username)'","maximiliano","Maximiliano", "WB559559", "wb559559"){
+	if inlist("`c(username)'","maximiliano","Maximiliano", "WB559559", "wb559559", "ifyou"){
 		global project			"D:/Documents/GitHub/research-projects/kdi-self-employment"
 	} 
 	
@@ -53,16 +53,16 @@
 	// To install all the required programs
 	run "${dofiles}/programs/packages.do"	 
 
-	packages ietoolkit winsor2 nsplit esttab psmatch2 reghdfe 
+	packages ietoolkit winsor2 nsplit esttab psmatch2 reghdfe ivreghdfe ivreg2 ranktest
 	ieboilstart, version(15.1)
 	
 	// TvsC to create comparison between eligible and non elitgible groups
 	run "${dofiles}/programs/tvsc.do"	
 	
 *** 0.5 Execution globals
-	global cleaning 	0
-	global append_dta	0
-	global construct	0
+	global cleaning 	1
+	global append_dta	1
+	global construct	1
 	global analysis		0
 	
 	set scheme s1color 	
