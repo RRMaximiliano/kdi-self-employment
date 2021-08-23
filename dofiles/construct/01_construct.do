@@ -266,26 +266,34 @@
 		local ++i
 	}
 	
-	
+  // Add self_employment
+  /*
+  forvalues x = 1/3 {
+    replace eligibility_`x' = 0 if selfemployment_`x' == 0
+  }
+  */
+  
 	// Real income
 	forvalues x = 1/3 {
 		gen real_income_`x' = (i_net_income_`x'/131.864135728891)*100 		if year==2009 
 		replace real_income_`x' = (i_net_income_`x'/87.5077463635998)*100 	if year==2005
 		replace real_income_`x' = (i_net_income_`x'/183.022153833333)*100 	if year==2014
 		
+    winsor2 real_income_`x', cuts(1 99) replace trim
+    
 		gen ln_real_income_`x' = log(real_income_`x')
-		
+    
 		label var real_income_`x' 		"Real income: activity `i'"
 		label var ln_real_income_`x' 	"Log of real income: activity `i'"
 	}
 	
 	// Time activity
 	gen time_activity_1 = main_cat_1 * 10000 + year 
-	
+	  
+  drop if age < 14
+  drop if age > 60 
+   
 *** Save dataset
 	save "${data_int}/emnv_cuaen_eligibility.dta", replace 
-	
-
-	
 	
 	

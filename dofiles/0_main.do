@@ -32,17 +32,17 @@
 	
 *** 0.2 Set relative folders
 	global dofiles		"${project}/dofiles"
-	global data			"${project}/data"
+	global data			  "${project}/data"
 	global outputs		"${project}/outputs"
 	global emnv_2005	"${data}/raw/2005"
 	global emnv_2009	"${data}/raw/2009"
 	global emnv_2014 	"${data}/raw/2014"
 	global data_int 	"${data}/intermediate"
 	
-	global caliper = 0.0001
+	global caliper = 0.01
 	if (${caliper}==0.0001) {
-		global tables 	"${outputs}/desc_stats_cap_0_0001/tables"
-		global figures 	"${outputs}/desc_stats_cap_0_0001/figures"
+		global tables 	"${outputs}/desc_stats_eligibility/tables"
+		global figures 	"${outputs}/desc_stats_eligibility/figures"
 	}	
 	
 *** 0.3 Tables globals
@@ -60,9 +60,9 @@
 	run "${dofiles}/programs/tvsc.do"	
 	
 *** 0.5 Execution globals
-	global cleaning 	1
-	global append_dta	1
-	global construct	1
+	global cleaning 	0
+	global append_dta	0
+	global construct	0
 	global analysis		0
 	
 	set scheme s1color 	
