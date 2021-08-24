@@ -47,12 +47,14 @@
           real_income_1		  ///
           training          ///
           training_nocost   ///
+          selfemployment_1  ///
           eligibility_1 
         
 	label var sex				        "Gender"
 	label var real_income_1		  "Real income"
 	label var ln_real_income_1 	"Log of real income"
 	label var eligibility_1		  "Eligibility (\%)"
+  label var selfemployment_1  "Self employed"
 	
 	// Esttab export
 	eststo clear 
@@ -98,17 +100,7 @@
 *** 2.3 	Table 6: Falsification Test by education only paid employed workers
 	preserve 
     
-    /*
-    drop eligibility_1
-    
-    recode cat_1 																///
-			(1 3 4 5 7 8 9 10 11 12 = 1 "Eligible") 	///
-			(2 6 13/max = 0 "Not Eligible"), 					///
-			gen(eligibility_1)
-		*/
-    
     keep if employed_1 == 1 
-    
 		recode time (1=0) (2=1)
 		    
 		local vars "sex edu area age household_size"
