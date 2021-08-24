@@ -40,7 +40,7 @@
 	global data_int 	"${data}/intermediate"
 	
 	global caliper = 0.01
-	if (${caliper}==0.0001) {
+	if (${caliper} == 0.01) {
 		global tables 	"${outputs}/desc_stats_eligibility/tables"
 		global figures 	"${outputs}/desc_stats_eligibility/figures"
 	}	
