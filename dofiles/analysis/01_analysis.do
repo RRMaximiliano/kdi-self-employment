@@ -280,7 +280,7 @@
             area
 		
 		eststo clear 
-		tvsc `vars' if time == 0, by(eligibility_1) clus_id(time_activity_1) strat_id(main_cat_1)
+		tvsc `vars' if !missing(time), by(eligibility_1) clus_id(time_activity_1) strat_id(main_cat_1)
 		esttab using "${tables}/balance_cov.tex", replace ${stars1}		///
 			cells("mu_2(fmt(%9.2fc)) mu_1(fmt(%9.2fc)) mu_3(fmt(%9.2fc) star pvalue(d_p))" "se_2(par) se_1(par) se_3(par)") 
 		
@@ -288,7 +288,7 @@
 		label var real_income_1 "Real Income"
 		
 		eststo clear 		
-		tvsc real_income_1 if time == 0, by(eligibility_1) clus_id(time_activity_1) strat_id(main_cat_1)	
+		tvsc real_income_1 if !missing(time), by(eligibility_1) clus_id(time_activity_1) strat_id(main_cat_1)	
 		esttab using "${tables}/balance_out.tex", replace ${stars1}		///
 			cells("mu_2(fmt(%9.2fc)) mu_1(fmt(%9.2fc)) mu_3(fmt(%9.2fc) star pvalue(d_p))" "se_2(par) se_1(par) se_3(par)") 	
 		
@@ -296,12 +296,12 @@
 		* Matched
 		* ~~~~~~~~~~
 		eststo clear 
-		tvsc `vars' if time == 0 [aw=_weight], by(_treated) clus_id(time_activity_1) strat_id(main_cat_1)
+		tvsc `vars' if !missing(time) [aw=_weight], by(_treated) clus_id(time_activity_1) strat_id(main_cat_1)
 		esttab using "${tables}/balance_cov_matched.tex", replace ${stars1}		///
 			cells("mu_2(fmt(%9.2fc)) mu_1(fmt(%9.2fc)) mu_3(fmt(%9.2fc) star pvalue(d_p))" "se_2(par) se_1(par) se_3(par)") 	
 		
 		eststo clear 
-		tvsc real_income_1 if time == 0 [aw=_weight], by(_treated) clus_id(time_activity_1) strat_id(main_cat_1)
+		tvsc real_income_1 if !missing(time) [aw=_weight], by(_treated) clus_id(time_activity_1) strat_id(main_cat_1)
 		esttab using "${tables}/balance_out_matched.tex", replace ${stars1}		///
 			cells("mu_2(fmt(%9.2fc)) mu_1(fmt(%9.2fc)) mu_3(fmt(%9.2fc) star pvalue(d_p))" "se_2(par) se_1(par) se_3(par)")				 
 			
