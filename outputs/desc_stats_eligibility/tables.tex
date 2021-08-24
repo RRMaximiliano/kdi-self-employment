@@ -237,281 +237,7 @@
 		\end{threeparttable}
 	\end{adjustbox}
 \end{table}
-
-
-%% NEW 
-
-%-----------------------------------------------------------------
-% Tab 5
-%-----------------------------------------------------------------
-\newpage 
-
-\begin{table}[H]
-	\centering 
-	\begin{adjustbox}{width=\linewidth}
-		\begin{threeparttable}
-			\caption{Heterogeneous treatment effects by education attainment and age interactions}
-			\label{tab:main_did_education_age}
-			\begin{tabular}{@{}l*{9}{c}@{}}
-				\toprule
-								&
-				\multicolumn{9}{c}{Dependent variable: Log of Real Income} \\ 
-				\cmidrule(l){2-10}
-								& 
-				\multicolumn{3}{c}{Overall}		          & 
-				\multicolumn{3}{c}{Primary completed} 	& 
-				\multicolumn{3}{c}{Secondary completed}	\\
-								&
-				\multicolumn{3}{c}{}					      & 
-				\multicolumn{3}{c}{or less} 				& 
-				\multicolumn{3}{c}{or less}					\\				
-				\cmidrule(lr){2-4}
-				\cmidrule(lr){5-7}
-				\cmidrule(l){8-10}	
-								&
-				Overall 		& 
-				Females 		& 
-				Males			& 
-				Overall 		& 
-				Females 		& 
-				Males			& 
-				Overall 		& 
-				Females 		& 
-				Males			\\								
-				Variables 		& 
-				(1)				&
-				(2)				&
-				(3)				&
-				(4)				& 
-				(5)				& 
-				(6)				& 
-				(7)				& 
-				(8)				& 
-				(9)				\\
-				\midrule 
-				\primitiveinput{tables/main_did_gender_age.tex} \\
-				\midrule
-				Controls						& Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes & Yes  & Yes 	& Yes\\
-				Regional Fixed Effects			& Yes 	& Yes	& Yes	& Yes  & Yes  & Yes & Yes  & Yes 	& Yes\\
-				Occupation Fixed Effects		& Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes & Yes  & Yes 	& Yes\\
-				Primary Activity Fixed Effects	& Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes & Yes  & Yes 	& Yes\\ 
-				\bottomrule
-			\end{tabular}
-			\begin{tablenotes}
-				\setlength\labelsep{0pt}
-				\footnotesize
-				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.0001 imposing common support. Post is a dummy variable equal to 1 if year is 2014 and 0 if year is 2009. Eligibility is a dummy variable equal to 1 if individuals are eligible for the SBFE program and 0 otherwise. Controls include gender, age, household size, years of education, and area of residence, four regional fixed effects, nine occupation fixed effects, and eighteen primary activity fixed effects. Robust standard errors clustered at the year times eighteen primary economic sectors are shown in parentheses. *** p<0.01, ** p<0.05, * p<0.1.
-			\end{tablenotes}
-		\end{threeparttable}
-	\end{adjustbox}
-\end{table}
-
-
-%% NEW : Age categories
-
-%-----------------------------------------------------------------
-% Tab 5
-%-----------------------------------------------------------------
-\newpage 
-
-\begin{table}[H]
-	\centering 
-	\begin{adjustbox}{width=\linewidth}
-		\begin{threeparttable}
-			\caption{Heterogeneous treatment effects by age categories}
-			\label{tab:main_did_education_age_cat}
-			\begin{tabular}{@{}l*{12}{c}@{}}
-				\toprule
-								&
-				\multicolumn{12}{c}{Dependent variable: Log of Real Income} \\ 
-				\cmidrule(l){2-13}
-								& 
-				\multicolumn{4}{c}{Overall} & 
-				\multicolumn{4}{c}{Females} & 
-				\multicolumn{4}{c}{Males}	    \\ 				
-        \cmidrule(r){2-5} \cmidrule(lr){6-9} \cmidrule(l){10-13}
-                  &
-        14-20     &
-        21-30     &
-        31-40     &
-        41+       &
-        14-20     &
-        21-30     &
-        31-40     &
-        41+       &
-        14-20     &
-        21-30     &
-        31-40     &
-        41+       \\
-                  &
-				(1)				&
-				(2)				&
-				(3)				&
-				(4)				& 
-				(5)				& 
-				(6)				& 
-				(7)				& 
-				(8)				& 
-				(9)				&
-        (10)      &
-        (11)      &
-        (12)      \\
-				\midrule 
-				\primitiveinput{tables/main_did_gender_age_cat.tex} \\
-				\midrule
-				Controls						            & Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes & Yes  & Yes 	& Yes& Yes  & Yes 	& Yes\\
-				Regional Fixed Effects			    & Yes 	& Yes	  & Yes	  & Yes  & Yes  & Yes & Yes  & Yes 	& Yes& Yes  & Yes 	& Yes\\
-				Occupation Fixed Effects		    & Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes & Yes  & Yes 	& Yes& Yes  & Yes 	& Yes\\
-				Primary Activity Fixed Effects	& Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes & Yes  & Yes 	& Yes& Yes  & Yes 	& Yes\\ 
-				\bottomrule
-			\end{tabular}
-			\begin{tablenotes}
-				\setlength\labelsep{0pt}
-				\footnotesize
-				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.0001 imposing common support. Post is a dummy variable equal to 1 if year is 2014 and 0 if year is 2009. Eligibility is a dummy variable equal to 1 if individuals are eligible for the SBFE program and 0 otherwise. Controls include gender, age, household size, years of education, and area of residence, four regional fixed effects, nine occupation fixed effects, and eighteen primary activity fixed effects. Robust standard errors clustered at the year times eighteen primary economic sectors are shown in parentheses. *** p<0.01, ** p<0.05, * p<0.1.
-			\end{tablenotes}
-		\end{threeparttable}
-	\end{adjustbox}
-\end{table}
-
-
-%% NEW : Age categories
-
-%-----------------------------------------------------------------
-% Tab 5
-%-----------------------------------------------------------------
-\newpage 
-
-\begin{table}[H]
-	\centering 
-	\begin{adjustbox}{width=\linewidth}
-		\begin{threeparttable}
-			\caption{Heterogeneous treatment effects by age categories only primary schooling or less}
-			\label{tab:main_did_education_age_cat_educ_1}
-			\begin{tabular}{@{}l*{12}{c}@{}}
-				\toprule
-								&
-				\multicolumn{12}{c}{Dependent variable: Log of Real Income} \\ 
-				\cmidrule(l){2-13}
-								& 
-				\multicolumn{4}{c}{Overall} & 
-				\multicolumn{4}{c}{Females} & 
-				\multicolumn{4}{c}{Males}	    \\ 				
-        \cmidrule(r){2-5} \cmidrule(lr){6-9} \cmidrule(l){10-13}
-                  &
-        14-20     &
-        21-30     &
-        31-40     &
-        41+       &
-        14-20     &
-        21-30     &
-        31-40     &
-        41+       &
-        14-20     &
-        21-30     &
-        31-40     &
-        41+       \\
-                  &
-				(1)				&
-				(2)				&
-				(3)				&
-				(4)				& 
-				(5)				& 
-				(6)				& 
-				(7)				& 
-				(8)				& 
-				(9)				&
-        (10)      &
-        (11)      &
-        (12)      \\
-				\midrule 
-				\primitiveinput{tables/main_did_gender_primary_age_cat.tex} \\
-				\midrule
-				Controls						            & Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes & Yes  & Yes 	& Yes& Yes  & Yes 	& Yes\\
-				Regional Fixed Effects			    & Yes 	& Yes	  & Yes	  & Yes  & Yes  & Yes & Yes  & Yes 	& Yes& Yes  & Yes 	& Yes\\
-				Occupation Fixed Effects		    & Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes & Yes  & Yes 	& Yes& Yes  & Yes 	& Yes\\
-				Primary Activity Fixed Effects	& Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes & Yes  & Yes 	& Yes& Yes  & Yes 	& Yes\\ 
-				\bottomrule
-			\end{tabular}
-			\begin{tablenotes}
-				\setlength\labelsep{0pt}
-				\footnotesize
-				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.0001 imposing common support. Post is a dummy variable equal to 1 if year is 2014 and 0 if year is 2009. Eligibility is a dummy variable equal to 1 if individuals are eligible for the SBFE program and 0 otherwise. Controls include gender, age, household size, years of education, and area of residence, four regional fixed effects, nine occupation fixed effects, and eighteen primary activity fixed effects. Robust standard errors clustered at the year times eighteen primary economic sectors are shown in parentheses. *** p<0.01, ** p<0.05, * p<0.1.
-			\end{tablenotes}
-		\end{threeparttable}
-	\end{adjustbox}
-\end{table}
-
-%-----------------------------------------------------------------
-% Tab 5
-%-----------------------------------------------------------------
-\newpage 
-
-\begin{table}[H]
-	\centering 
-	\begin{adjustbox}{width=\linewidth}
-		\begin{threeparttable}
-			\caption{Heterogeneous treatment effects by age categories only secondary schooling or less}
-			\label{tab:main_did_education_age_cat_educ_2}
-			\begin{tabular}{@{}l*{12}{c}@{}}
-				\toprule
-								&
-				\multicolumn{12}{c}{Dependent variable: Log of Real Income} \\ 
-				\cmidrule(l){2-13}
-								& 
-				\multicolumn{4}{c}{Overall} & 
-				\multicolumn{4}{c}{Females} & 
-				\multicolumn{4}{c}{Males}	    \\ 				
-        \cmidrule(r){2-5} \cmidrule(lr){6-9} \cmidrule(l){10-13}
-                  &
-        14-20     &
-        21-30     &
-        31-40     &
-        41+       &
-        14-20     &
-        21-30     &
-        31-40     &
-        41+       &
-        14-20     &
-        21-30     &
-        31-40     &
-        41+       \\
-                  &
-				(1)				&
-				(2)				&
-				(3)				&
-				(4)				& 
-				(5)				& 
-				(6)				& 
-				(7)				& 
-				(8)				& 
-				(9)				&
-        (10)      &
-        (11)      &
-        (12)      \\
-				\midrule 
-				\primitiveinput{tables/main_did_gender_high_school_age_cat.tex} \\
-				\midrule
-				Controls						            & Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes & Yes  & Yes 	& Yes& Yes  & Yes 	& Yes\\
-				Regional Fixed Effects			    & Yes 	& Yes	  & Yes	  & Yes  & Yes  & Yes & Yes  & Yes 	& Yes& Yes  & Yes 	& Yes\\
-				Occupation Fixed Effects		    & Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes & Yes  & Yes 	& Yes& Yes  & Yes 	& Yes\\
-				Primary Activity Fixed Effects	& Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes & Yes  & Yes 	& Yes& Yes  & Yes 	& Yes\\ 
-				\bottomrule
-			\end{tabular}
-			\begin{tablenotes}
-				\setlength\labelsep{0pt}
-				\footnotesize
-				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.0001 imposing common support. Post is a dummy variable equal to 1 if year is 2014 and 0 if year is 2009. Eligibility is a dummy variable equal to 1 if individuals are eligible for the SBFE program and 0 otherwise. Controls include gender, age, household size, years of education, and area of residence, four regional fixed effects, nine occupation fixed effects, and eighteen primary activity fixed effects. Robust standard errors clustered at the year times eighteen primary economic sectors are shown in parentheses. *** p<0.01, ** p<0.05, * p<0.1.
-			\end{tablenotes}
-		\end{threeparttable}
-	\end{adjustbox}
-\end{table}
-
-
-
-
-
-
+\end{landscape}
 
 %-----------------------------------------------------------------
 % Tab 6
@@ -520,8 +246,53 @@
 	\centering 
 	\begin{adjustbox}{width=\linewidth}
 		\begin{threeparttable}
+			\caption{Heterogeneous treatment effects by age categories}
+			\label{tab:main_did_education_age_cat}
+			\begin{tabular}{@{}l*{6}{c}@{}}
+				\toprule
+								&
+				\multicolumn{6}{c}{Dependent variable: Log of Real Income} \\ 
+				\cmidrule(l){2-7}
+								& 
+				\multicolumn{3}{c}{Below median age} & 
+				\multicolumn{3}{c}{Above median age} \\
+        \cmidrule(lr){2-4} \cmidrule(l){5-7}
+                &
+        Overall &
+        Females & 
+        Males   & 
+        Overall &
+        Females & 
+        Males   \\      			
+				\midrule 
+				\primitiveinput{tables/main_did_gender_age_med.tex} \\
+				\midrule
+				Controls						            & Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes \\
+				Regional Fixed Effects			    & Yes 	& Yes	  & Yes	  & Yes  & Yes  & Yes \\
+				Occupation Fixed Effects		    & Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes \\
+				Primary Activity Fixed Effects	& Yes  	& Yes 	& Yes 	& Yes  & Yes  & Yes \\ 
+				\bottomrule
+			\end{tabular}
+			\begin{tablenotes}
+				\setlength\labelsep{0pt}
+				\footnotesize
+				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.0001 imposing common support. Post is a dummy variable equal to 1 if year is 2014 and 0 if year is 2009. Eligibility is a dummy variable equal to 1 if individuals are eligible for the SBFE program and 0 otherwise. Controls include gender, age, household size, years of education, and area of residence, four regional fixed effects, nine occupation fixed effects, and eighteen primary activity fixed effects. Robust standard errors clustered at the year times eighteen primary economic sectors are shown in parentheses. *** p<0.01, ** p<0.05, * p<0.1.
+			\end{tablenotes}
+		\end{threeparttable}
+	\end{adjustbox}
+\end{table}
+
+%-----------------------------------------------------------------
+% Tab 7
+%-----------------------------------------------------------------
+\begin{landscape}
+
+\begin{table}[H]
+	\centering 
+	\begin{adjustbox}{width=\linewidth}
+		\begin{threeparttable}
 			\caption{Falsification test on paid-employed workers between 2009 and 2014}
-			\label{tab:main_did_education}
+			\label{tab:falsification_test}
 			\begin{tabular}{@{}l*{9}{c}@{}}
 				\toprule
 								&
@@ -576,8 +347,9 @@
 	\end{adjustbox}
 \end{table}
 \end{landscape}
+
 %-----------------------------------------------------------------
-% Tab 7
+% Tab 8
 %-----------------------------------------------------------------
 \begin{table}[H]
 	\centering 
@@ -588,7 +360,7 @@
 			\begin{tabular}{@{}l*{4}{c}@{}}
 				\toprule
 								&
-				\multicolumn{4}{c}{Dependent variable:} \\ 
+				\multicolumn{4}{c}{Dependent variable:} \\ \cmidrule(l){2-5}
 								&
 				Received		&
 				Weekly hours	&
