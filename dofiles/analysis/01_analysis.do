@@ -32,7 +32,14 @@
 	use "${data_int}/emnv_cuaen_eligibility.dta", clear 
 	
   set seed 78123564
-      
+
+*** New eligibility status using (sector + self_employment)
+  gen eligibility_sf = (eligibility_1 == 1) if selfemployment_1 == 1
+  label var eligibility_sf "Eligible = (sector $+$ self employed)"
+  
+  gen eligibility_em = (eligibility_1 == 1) if employed_1 == 1
+  label var eligibility_sf "Eligible = (sector $+$ employed)"
+  
 *********************************************************************************
 *	PART 2: Tables
 ********************************************************************************/
@@ -47,12 +54,14 @@
           real_income_1		  ///
           training          ///
           training_nocost   ///
-          eligibility_1 
+          selfemployment_1  ///
+          eligibility_sf 
         
 	label var sex				        "Gender"
 	label var real_income_1		  "Real income"
 	label var ln_real_income_1 	"Log of real income"
 	label var eligibility_1		  "Eligibility (\%)"
+  label var selfemployment_1  "Self employed"
 	
 	// Esttab export
 	eststo clear 
@@ -77,7 +86,7 @@
 		keep if time != 2
 
 		local vars "sex edu area age household_size"
-		psmatch2 eligibility_1 `vars', out(ln_real_income_1) neighbor(20)
+		psmatch2 eligibility_sf `vars', out(ln_real_income_1) neighbor(20)
 
 		label define _treated 	1"Eligibility" 0"Non", 	modify 
 		label define time 		  0"Pre" 1"Post", 		modify
@@ -85,6 +94,7 @@
 		label values time time 
 		
 		eststo clear 
+    local vars "sex edu area age household_size"
 		eststo: reghdfe ln_real_income_1 time##_treated [aw=_weight], 		 noabsorb 								vce(cluster time_activity_1)
 		eststo: reghdfe ln_real_income_1 time##_treated `vars' [aw=_weight], noabsorb 								vce(cluster time_activity_1)		
 		eststo: reghdfe ln_real_income_1 time##_treated `vars' [aw=_weight], absorb(dominio4) 						vce(cluster time_activity_1)
@@ -97,22 +107,13 @@
 	
 *** 2.3 	Table 6: Falsification Test by education only paid employed workers
 	preserve 
-    
-    /*
-    drop eligibility_1
-    
-    recode cat_1 																///
-			(1 3 4 5 7 8 9 10 11 12 = 1 "Eligible") 	///
-			(2 6 13/max = 0 "Not Eligible"), 					///
-			gen(eligibility_1)
-		*/
-    
+       
     keep if employed_1 == 1 
     
 		recode time (1=0) (2=1)
 		    
 		local vars "sex edu area age household_size"
-		psmatch2 eligibility_1 `vars', out(ln_real_income_1) neighbor(20)
+		psmatch2 eligibility_em `vars', out(ln_real_income_1) neighbor(20)
 
 		label define _treated 	1"Eligibility" 0"Non", 	modify 
 		label define time 		  0"Pre" 1"Post", 		    modify
@@ -142,13 +143,11 @@
 	
 *** 2.4 	Table 4: Main Differences in Differences
 	preserve 
-		keep if selfemployment_1 == 1
-		keep if time != 0
-		
+		keep if time != 0		
 		recode time (1=0) (2=1)
-        
+    
 		local vars "sex edu area age household_size"
-		psmatch2 eligibility_1 `vars', out(ln_real_income_1) neighbor(20)
+		psmatch2 eligibility_sf `vars', out(ln_real_income_1) neighbor(20)
 		
 		label define _treated 	1"Eligibility" 0"Non", 	modify 
 		label define time 		  0"Pre" 1"Post", 		modify
@@ -337,7 +336,7 @@
             area
 		
 		eststo clear 
-		tvsc `vars' if time == 0, by(eligibility_1) clus_id(time_activity_1) strat_id(main_cat_1)
+		tvsc `vars' if time == 0, by(eligibility_sf) clus_id(time_activity_1) strat_id(main_cat_1)
 		esttab using "${tables}/balance_cov.tex", replace ${stars1}		///
 			cells("mu_2(fmt(%9.2fc)) mu_1(fmt(%9.2fc)) mu_3(fmt(%9.2fc) star pvalue(d_p))" "se_2(par) se_1(par) se_3(par)") 
 		
@@ -345,7 +344,7 @@
 		label var real_income_1 "Real Income"
 		
 		eststo clear 		
-		tvsc real_income_1 if time == 0, by(eligibility_1) clus_id(time_activity_1) strat_id(main_cat_1)	
+		tvsc real_income_1 if time == 0, by(eligibility_sf) clus_id(time_activity_1) strat_id(main_cat_1)	
 		esttab using "${tables}/balance_out.tex", replace ${stars1}		///
 			cells("mu_2(fmt(%9.2fc)) mu_1(fmt(%9.2fc)) mu_3(fmt(%9.2fc) star pvalue(d_p))" "se_2(par) se_1(par) se_3(par)") 	
 		
@@ -370,25 +369,25 @@
 		*** 3.1 Kernel density
 		foreach var of varlist real_income_1 edu age household_size { 
 		// With Matching
-		kdensity `var' if eligibility_1==1 [aw=_weight], plot(kdensity `var' if eligibility_1==0 [aw=_weight]) legend(label(1 "Eligible") label(2 "Not Eligible") rows(1))
+		kdensity `var' if eligibility_sf==1 [aw=_weight], plot(kdensity `var' if eligibility_1==0 [aw=_weight]) legend(label(1 "Eligible") label(2 "Not Eligible") rows(1))
 			graph export "${figures}/kernel_`var'.pdf", replace 
 			graph export "${figures}/kernel_`var'.png", replace 
 		
 		// Without matching
-		kdensity `var' if eligibility_1==1, plot(kdensity `var' if eligibility_1==0) legend(label(1 "Eligible") label(2 "Not Eligible") rows(1))
+		kdensity `var' if eligibility_sf==1, plot(kdensity `var' if eligibility_1==0) legend(label(1 "Eligible") label(2 "Not Eligible") rows(1))
 			graph export "${figures}/kernelnm_`var'.pdf", replace 
 			graph export "${figures}/kernelnm_`var'.png", replace 
 		} 		
 		
 		// 3.2 Bias 
 		local vars "sex edu area age household_size"		
-		pstest `vars' if time!=., t(eligibility_1) mw(_weight) both hist 
+		pstest `vars' if time!=., t(eligibility_sf) mw(_weight) both hist 
 			graph export "${figures}/psmatch_hist.png", replace 
-		pstest `vars' if time!=., t(eligibility_1) mw(_weight) both hist 			
+		pstest `vars' if time!=., t(eligibility_sf) mw(_weight) both hist 			
 			graph export "${figures}/psmatch_hist.pdf", replace 
-		pstest `vars' if time!=., t(eligibility_1) mw(_weight) both graph 
+		pstest `vars' if time!=., t(eligibility_sf) mw(_weight) both graph 
 			graph export "${figures}/psmatch_balance.png", replace 
-		pstest `vars' if time!=., t(eligibility_1) mw(_weight) both graph 			
+		pstest `vars' if time!=., t(eligibility_sf) mw(_weight) both graph 			
 			graph export "${figures}/psmatch_balance.pdf", replace 
 		psgraph, bin(20)
 			graph export "${figures}/psmatch_bins.png", replace 
