@@ -35,6 +35,8 @@
 
 *** New eligibility status using (sector + self_employment)
   gen eligibility_sf = (eligibility_1 == 1) if selfemployment_1 == 1
+  replace eligibility_sf = 0 if selfemployment_1 == 0
+  
   label var eligibility_sf "Eligible = (sector $+$ self employed)"
   
   gen eligibility_em = (eligibility_1 == 1) if employed_1 == 1
@@ -145,7 +147,7 @@
 	preserve 
 		keep if time != 0		
 		recode time (1=0) (2=1)
-    
+     
 		local vars "sex edu area age household_size"
 		psmatch2 eligibility_sf `vars', out(ln_real_income_1) neighbor(20)
 		
@@ -284,7 +286,7 @@
             area
 		
 		eststo clear 
-		tvsc `vars' if time == 0, by(eligibility_sf) clus_id(time_activity_1) strat_id(main_cat_1)
+		tvsc `vars' if !missing(time), by(eligibility_sf) clus_id(time_activity_1) strat_id(main_cat_1)
 		esttab using "${tables}/balance_cov.tex", replace ${stars1}		///
 			cells("mu_2(fmt(%9.2fc)) mu_1(fmt(%9.2fc)) mu_3(fmt(%9.2fc) star pvalue(d_p))" "se_2(par) se_1(par) se_3(par)") 
 		
@@ -292,7 +294,7 @@
 		label var real_income_1 "Real Income"
 		
 		eststo clear 		
-		tvsc real_income_1 if time == 0, by(eligibility_sf) clus_id(time_activity_1) strat_id(main_cat_1)	
+		tvsc real_income_1 if !missing(time), by(eligibility_sf) clus_id(time_activity_1) strat_id(main_cat_1)	
 		esttab using "${tables}/balance_out.tex", replace ${stars1}		///
 			cells("mu_2(fmt(%9.2fc)) mu_1(fmt(%9.2fc)) mu_3(fmt(%9.2fc) star pvalue(d_p))" "se_2(par) se_1(par) se_3(par)") 	
 		
@@ -300,12 +302,12 @@
 		* Matched
 		* ~~~~~~~~~~
 		eststo clear 
-		tvsc `vars' if time == 0 [aw=_weight], by(_treated) clus_id(time_activity_1) strat_id(main_cat_1)
+		tvsc `vars' if !missing(time) [aw=_weight], by(_treated) clus_id(time_activity_1) strat_id(main_cat_1)
 		esttab using "${tables}/balance_cov_matched.tex", replace ${stars1}		///
 			cells("mu_2(fmt(%9.2fc)) mu_1(fmt(%9.2fc)) mu_3(fmt(%9.2fc) star pvalue(d_p))" "se_2(par) se_1(par) se_3(par)") 	
 		
 		eststo clear 
-		tvsc real_income_1 if time == 0 [aw=_weight], by(_treated) clus_id(time_activity_1) strat_id(main_cat_1)
+		tvsc real_income_1 if !missing(time) [aw=_weight], by(_treated) clus_id(time_activity_1) strat_id(main_cat_1)
 		esttab using "${tables}/balance_out_matched.tex", replace ${stars1}		///
 			cells("mu_2(fmt(%9.2fc)) mu_1(fmt(%9.2fc)) mu_3(fmt(%9.2fc) star pvalue(d_p))" "se_2(par) se_1(par) se_3(par)")				 
 			
