@@ -39,11 +39,40 @@
 	global emnv_2014 	"${data}/raw/2014"
 	global data_int 	"${data}/intermediate"
 	
-	global caliper = 0.01
-	if (${caliper} == 0.01) {
-		global tables 	"${outputs}/desc_stats_eligibility/tables"
-		global figures 	"${outputs}/desc_stats_eligibility/figures"
-	}	
+  global comcal = 1
+  global caliper  = 0.0001
+  if (${comcal} == 1) {
+  	global psmatch = "com caliper(${caliper})"
+    global weights = "[fw = _weight]"
+    
+    // Tables and figures
+    global tables 	"${outputs}/desc_stats_cap_0_0001/tables"
+		global figures 	"${outputs}/desc_stats_cap_0_0001/figures"
+  }
+	
+  global nnncal = 0
+  if (${nnncal} == 1) {
+    global nn       = 20
+    global psmatch  = "neighbor(${nn})"  	
+    global weights  = "[aw = _weight]"
+     
+    // Tables and Figures outputs
+    if (${nn} == 5) {
+      global tables 	"${outputs}/desc_stats_eligibility_nn_5/tables"
+      global figures 	"${outputs}/desc_stats_eligibility_nn_5/figures"
+    }	
+    
+    else if (${nn} == 10) {
+      global tables 	"${outputs}/desc_stats_eligibility_nn_10/tables"
+      global figures 	"${outputs}/desc_stats_eligibility_nn_10/figures"	
+    }
+    
+    else if (${nn} == 20) {
+      global tables 	"${outputs}/desc_stats_eligibility_nn_20/tables"
+      global figures 	"${outputs}/desc_stats_eligibility_nn_20/figures"	 	
+    }
+  }
+  
 	
 *** 0.3 Tables globals
 	global stars1	"label nolines nogaps fragment nomtitle nonumbers noobs nodep star(* 0.10 ** 0.05 *** 0.01) collabels(none) booktabs b(3) se(3)"
@@ -63,10 +92,10 @@
 	global cleaning 	0
 	global append_dta	0
 	global construct	0
-	global analysis		0
+	global analysis		1
 	
 	set scheme s1color 	
-	
+	  
 ********************************************************************************
 ***	Part 1:  Cleaning 
 ********************************************************************************
