@@ -1,43 +1,78 @@
 %-----------------------------------------------------------------
 % Tab 1
 %-----------------------------------------------------------------
-\begin{table}[H]
-	\centering 
-	\begin{adjustbox}{max width=\textheight}
-		\begin{threeparttable}
-			\caption{Summary statistics for self-employed workers in the LSMS}
-			\label{tab:summ_stats}
-			\begin{tabular}{@{}l*{5}{c}@{}}
-				\toprule
-				Variable 		& 
-				Obs. 			& 	 
-				Mean			&
-				St. Dev.		& 
-				Min				&
-				Max 			\\
-				\midrule
-				\multicolumn{6}{@{}l}{\textit{Panel A. Overall (all years)}}		\\			
-				\primitiveinput{tables/summ_stats_pooled.tex} 			
-				\midrule						
-				\multicolumn{6}{@{}l}{\textit{Panel B. 2005}}			\\			
-				\primitiveinput{tables/summ_stats_2005.tex}	
-				\midrule				
-				\multicolumn{6}{@{}l}{\textit{Panel C. 2009}}			\\				
-				\primitiveinput{tables/summ_stats_2009.tex}				
-				\midrule		 				
-				\multicolumn{6}{@{}l}{\textit{Panel D. 2014}}			\\	
-				\primitiveinput{tables/summ_stats_2014.tex} 				
-				\bottomrule
-			\end{tabular}
-			\begin{tablenotes}
-				\setlength\labelsep{0pt}
-				\footnotesize
-				\item \textit{Notes}: This table presents summary statistics for the overall sample and each LSMS wave sample (2005, 2009, and 2014). Gender is a dummy variable that equals 1 if the individual is male and 0 otherwise. Area of residency is a dummy variable that equals 1 if the individual lives in an urban area and 0 otherwise. Real income was calculated by the 2006 consumer price index (CPI) from the Central Bank of Nicaragua. 
-			\end{tablenotes}
-		\end{threeparttable}
-	\end{adjustbox}
-\end{table}
 
+% \begin{table}[H]
+% 	\centering 
+% 	\begin{adjustbox}{max width=\textheight}
+% 		\begin{threeparttable}
+% 			\caption{Summary statistics for self-employed workers in the LSMS}
+% 			\label{tab:summ_stats}
+% 			\begin{tabular}{@{}l*{5}{c}@{}}
+% 				\toprule
+% 				Variable 		& 
+% 				Obs. 			& 	 
+% 				Mean			&
+% 				St. Dev.		& 
+% 				Min				&
+% 				Max 			\\
+% 				\midrule
+% 				\multicolumn{6}{@{}l}{\textit{Panel A. Overall (all years)}}		\\			
+% 				\primitiveinput{tables/summ_stats_pooled.tex} 			
+% 				\midrule						
+% 				\multicolumn{6}{@{}l}{\textit{Panel B. 2005}}			\\			
+% 				\primitiveinput{tables/summ_stats_2005.tex}	
+% 				\midrule				
+% 				\multicolumn{6}{@{}l}{\textit{Panel C. 2009}}			\\				
+% 				\primitiveinput{tables/summ_stats_2009.tex}				
+% 				\midrule		 				
+% 				\multicolumn{6}{@{}l}{\textit{Panel D. 2014}}			\\	
+% 				\primitiveinput{tables/summ_stats_2014.tex} 				
+% 				\bottomrule
+% 			\end{tabular}
+% 			\begin{tablenotes}
+% 				\setlength\labelsep{0pt}
+% 				\footnotesize
+% 				\item \textit{Notes}: This table presents summary statistics for the overall sample and each LSMS wave sample (2005, 2009, and 2014). Gender is a dummy variable that equals 1 if the individual is male and 0 otherwise. Area of residency is a dummy variable that equals 1 if the individual lives in an urban area and 0 otherwise. Real income was calculated by the 2006 consumer price index (CPI) from the Central Bank of Nicaragua. 
+% 			\end{tablenotes}
+% 		\end{threeparttable}
+% 	\end{adjustbox}
+% \end{table}
+
+\begin{landscape}
+  
+  \begin{table}[H]
+    \centering 
+    \begin{adjustbox}{width=\linewidth}
+      \begin{threeparttable}
+        \caption{Summary statistics for self-employed and paid-employed workers in the LSMS}
+        \label{tab:summ_stats_selfemployed}
+        \begin{tabular}{@{}l*{8}{c}@{}}
+          \toprule
+                    & \multicolumn{2}{c}{All years} & \multicolumn{2}{c}{2005}  & \multicolumn{2}{c}{2009}  &  \multicolumn{2}{c}{2014} \\
+          \cmidrule(lr){2-3}
+          \cmidrule(lr){4-5}
+          \cmidrule(lr){6-7}
+          \cmidrule(r){8-9}
+          Variable  & N & Mean / (SD) & N & Mean / (SD) & N & Mean / (SD) & N & Mean / (SD) \\ 
+          \midrule
+          \multicolumn{9}{@{}l}{\textit{Panel A. Self-employed workers}}  \\
+          \primitiveinput{tables/tab1_summary_selfemployment_1.tex } 				
+          \midrule
+          \multicolumn{9}{@{}l}{\textit{Panel B. Paid-employed workers}}  \\
+          \primitiveinput{tables/tab1_summary_employed_1.tex } 				
+          \bottomrule
+        \end{tabular}
+        \begin{tablenotes}
+          \setlength\labelsep{0pt}
+          \footnotesize
+          \item \textit{Notes}: This table presents summary statistics for the overall sample and each LSMS wave sample (2005, 2009, and 2014). Gender is a dummy variable that equals 1 if the individual is male and 0 otherwise. Area of residency is a dummy variable that equals 1 if the individual lives in an urban area and 0 otherwise. Real income was calculated by the 2006 consumer price index (CPI) from the Central Bank of Nicaragua. Standard deviation omitted for dummary variables.
+        \end{tablenotes}
+      \end{threeparttable}
+    \end{adjustbox}
+  \end{table}
+
+\end{landscape}
 %-----------------------------------------------------------------
 % Tab 2
 %-----------------------------------------------------------------
@@ -98,10 +133,10 @@
 			\label{tab:summ_stats_pooled}
 			\begin{tabular}{@{}l*{5}{c}@{}}
 				\toprule
-								&
+								  &
 				\multicolumn{5}{c}{Dependent variable: Log of Real Income} \\ 
 				\cmidrule(l){2-6}
-				Variables 		& 
+				Variables & 
 				(1)				&
 				(2)				&
 				(3)				&
@@ -110,28 +145,80 @@
 				\midrule 
 				\primitiveinput{tables/parallel_trends.tex} \\
 				\midrule
-				Controls						& No  	& Yes 	& Yes 	& Yes 	& Yes \\
-				Regional Fixed Effects			& No 	& No	& Yes	& Yes	& Yes \\
-				Occupation Fixed Effects		& No  	& No 	& No 	& Yes 	& Yes \\					
+				Controls						            & No  	& Yes 	& Yes 	& Yes 	& Yes \\
+				Regional Fixed Effects			    & No 	& No	& Yes	& Yes	& Yes \\
+				Occupation Fixed Effects		    & No  	& No 	& No 	& Yes 	& Yes \\					
 				Primary Activity Fixed Effects	& No  	& No 	& No 	& No 	& Yes \\ 					
 				\bottomrule
 			\end{tabular}
 			\begin{tablenotes}
 				\setlength\labelsep{0pt}
 				\footnotesize
-				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.0001 imposing common support. We use only the 2005 and 2009 sample for test for parallel trends. Post is a dummy variable equal to 1 if year is 2009 and 0 if year is 2005. Eligibility is a dummy variable equal to 1 if individuals are eligible for the SBFE program and 0 otherwise. Controls include gender, age, household size, years of education, and area of residence, four regional fixed effects, nine occupation fixed effects, and eighteen primary activity fixed effects. Robust standard errors clustered at the year times eighteen primary economic sectors are shown in parentheses. *** p<0.01, ** p<0.05, * p<0.1.
+				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is full Mahalanobis using 10 neighbors without caliper We use only the 2005 and 2009 sample for test for parallel trends. Post is a dummy variable equal to 1 if year is 2009 and 0 if year is 2005. Eligibility is a dummy variable equal to 1 if individuals are eligible for the SBFE program and 0 otherwise. Controls include gender, age, household size, years of education, and area of residence, four regional fixed effects, nine occupation fixed effects, and eighteen primary activity fixed effects. Robust standard errors clustered at the year times eighteen primary economic sectors are shown in parentheses. *** p<0.01, ** p<0.05, * p<0.1.
 			\end{tablenotes}
 		\end{threeparttable}
 \end{table}
 %-----------------------------------------------------------------
-% Tab 4
+% Tab 3 FULL
 %-----------------------------------------------------------------
 \begin{landscape}
+  \begin{table}[H]
+    \centering 
+    \begin{adjustbox}{width=\linewidth}
+      \begin{threeparttable}
+        \caption{Test for parallel trends by gender}
+        \label{tab:main_did_gender_ptrends}
+        \begin{tabular}{@{}l*{9}{c}@{}}
+          \toprule
+                  &
+          \multicolumn{9}{c}{Dependent variable: Log of Real Income} \\ 
+          \cmidrule(l){2-10}
+                  & 
+          \multicolumn{3}{c}{Overall}	& 
+          \multicolumn{3}{c}{Females} & 
+          \multicolumn{3}{c}{Males}	\\
+          \cmidrule(lr){2-4}
+          \cmidrule(lr){5-7}
+          \cmidrule(l){8-10}	
+          Variables 		& 
+          (1)				&
+          (2)				&
+          (3)				&
+          (4)				& 
+          (5)				& 
+          (6)				& 
+          (7)				& 
+          (8)				& 
+          (9)				\\
+          \midrule 
+          \primitiveinput{tables/parallel_trends_full.tex} \\
+          \midrule
+          Controls						            & No  	& Yes & Yes 	& No  & Yes & Yes & No  & Yes & Yes\\
+          Regional Fixed Effects			    & No 	  & Yes	& Yes	  & No  & Yes & Yes & No  & Yes & Yes\\
+          Occupation Fixed Effects		    & No  	& No 	& Yes 	& No  & No  & Yes & No  & No 	& Yes\\
+          Primary Activity Fixed Effects	& No  	& No 	& Yes 	& No  & No  & Yes & No  & No 	& Yes\\				 
+          \bottomrule
+        \end{tabular}
+        \begin{tablenotes}
+          \setlength\labelsep{0pt}
+          \footnotesize
+          \item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is full Mahalanobis using 10 neighbors without caliper Post is a dummy variable equal to 1 if year is 2014 and 0 if year is 2009. Eligibility is a dummy variable equal to 1 if individuals are eligible for the SBFE program and 0 otherwise. Controls include gender, age, household size, years of education, and area of residence, four regional fixed effects, nine occupation fixed effects, and eighteen primary activity fixed effects. Robust standard errors clustered at the year times eighteen primary economic sectors are shown in parentheses. *** p<0.01, ** p<0.05, * p<0.1.			
+        \end{tablenotes}
+      \end{threeparttable}
+    \end{adjustbox}
+\end{table}
+
+
+
+%-----------------------------------------------------------------
+% Tab 4
+%-----------------------------------------------------------------
+
 \begin{table}[H]
 	\centering 
 	\begin{adjustbox}{width=\linewidth}
 		\begin{threeparttable}
-			\caption{Impact of SBFE program on income}
+			\caption{Association between SBFE program and income}
 			\label{tab:main_did_gender}
 			\begin{tabular}{@{}l*{9}{c}@{}}
 				\toprule
@@ -167,7 +254,7 @@
 			\begin{tablenotes}
 				\setlength\labelsep{0pt}
 				\footnotesize
-				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.0001 imposing common support. Post is a dummy variable equal to 1 if year is 2014 and 0 if year is 2009. Eligibility is a dummy variable equal to 1 if individuals are eligible for the SBFE program and 0 otherwise. Controls include gender, age, household size, years of education, and area of residence, four regional fixed effects, nine occupation fixed effects, and eighteen primary activity fixed effects. Robust standard errors clustered at the year times eighteen primary economic sectors are shown in parentheses. *** p<0.01, ** p<0.05, * p<0.1.			
+				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is full Mahalanobis using 10 neighbors without caliper Post is a dummy variable equal to 1 if year is 2009 and 0 if year is 2005. Eligibility is a dummy variable equal to 1 if individuals are eligible for the SBFE program and 0 otherwise. Controls include gender, age, household size, years of education, and area of residence, four regional fixed effects, nine occupation fixed effects, and eighteen primary activity fixed effects. Robust standard errors clustered at the year times eighteen primary economic sectors are shown in parentheses. *** p<0.01, ** p<0.05, * p<0.1.			
 			\end{tablenotes}
 		\end{threeparttable}
 	\end{adjustbox}
@@ -232,7 +319,7 @@
 			\begin{tablenotes}
 				\setlength\labelsep{0pt}
 				\footnotesize
-				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.0001 imposing common support. Post is a dummy variable equal to 1 if year is 2014 and 0 if year is 2009. Eligibility is a dummy variable equal to 1 if individuals are eligible for the SBFE program and 0 otherwise. Controls include gender, age, household size, years of education, and area of residence, four regional fixed effects, nine occupation fixed effects, and eighteen primary activity fixed effects. Robust standard errors clustered at the year times eighteen primary economic sectors are shown in parentheses. *** p<0.01, ** p<0.05, * p<0.1.
+				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is full Mahalanobis using 10 neighbors without caliper Post is a dummy variable equal to 1 if year is 2014 and 0 if year is 2009. Eligibility is a dummy variable equal to 1 if individuals are eligible for the SBFE program and 0 otherwise. Controls include gender, age, household size, years of education, and area of residence, four regional fixed effects, nine occupation fixed effects, and eighteen primary activity fixed effects. Robust standard errors clustered at the year times eighteen primary economic sectors are shown in parentheses. *** p<0.01, ** p<0.05, * p<0.1.
 			\end{tablenotes}
 		\end{threeparttable}
 	\end{adjustbox}
@@ -276,7 +363,7 @@
 			\begin{tablenotes}
 				\setlength\labelsep{0pt}
 				\footnotesize
-				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.0001 imposing common support. Post is a dummy variable equal to 1 if year is 2014 and 0 if year is 2009. Eligibility is a dummy variable equal to 1 if individuals are eligible for the SBFE program and 0 otherwise. Controls include gender, age, household size, years of education, and area of residence, four regional fixed effects, nine occupation fixed effects, and eighteen primary activity fixed effects. Robust standard errors clustered at the year times eighteen primary economic sectors are shown in parentheses. *** p<0.01, ** p<0.05, * p<0.1.
+				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is full Mahalanobis using 10 neighbors without caliper Post is a dummy variable equal to 1 if year is 2014 and 0 if year is 2009. Eligibility is a dummy variable equal to 1 if individuals are eligible for the SBFE program and 0 otherwise. Controls include gender, age, household size, years of education, and area of residence, four regional fixed effects, nine occupation fixed effects, and eighteen primary activity fixed effects. Robust standard errors clustered at the year times eighteen primary economic sectors are shown in parentheses. *** p<0.01, ** p<0.05, * p<0.1.
 			\end{tablenotes}
 		\end{threeparttable}
 	\end{adjustbox}
@@ -341,7 +428,7 @@
 			\begin{tablenotes}
 				\setlength\labelsep{0pt}
 				\footnotesize
-				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.0001 imposing common support. We use the sample of paid- employed workers from 2009 and 2014 LSMS for the falsification test. Post is a dummy variable equal to 1 if year is 2014 and 0 if year is 2009. Eligibility is a dummy variable equal to 1 if individuals are eligible for the SBFE program and 0 otherwise. Controls include gender, age, household size, years of education, and area of residence, four regional fixed effects, nine occupation fixed effects, and eighteen primary activity fixed effects. Robust standard errors clustered at the year times eighteen primary economic sectors are shown in parentheses. *** p<0.01, ** p<0.05, * p<0.1.
+				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is full Mahalanobis using 10 neighbors without caliper We use the sample of paid- employed workers from 2009 and 2014 LSMS for the falsification test. Post is a dummy variable equal to 1 if year is 2014 and 0 if year is 2009. Eligibility is a dummy variable equal to 1 if individuals are eligible for the SBFE program and 0 otherwise. Controls include gender, age, household size, years of education, and area of residence, four regional fixed effects, nine occupation fixed effects, and eighteen primary activity fixed effects. Robust standard errors clustered at the year times eighteen primary economic sectors are shown in parentheses. *** p<0.01, ** p<0.05, * p<0.1.
 			\end{tablenotes}
 		\end{threeparttable}
 	\end{adjustbox}
@@ -355,48 +442,45 @@
 	\centering 
 	\begin{adjustbox}{max width=\textheight}
 		\begin{threeparttable}
-			\caption{Possible mechanisms for the SBFE program impact}
+			\caption{Possible mechanisms for the SBFE program}
 			\label{tab:other_outcomes}
-			\begin{tabular}{@{}l*{4}{c}@{}}
+			\begin{tabular}{@{}l P{2.25cm} P{2.25cm} P{2.25cm}}
 				\toprule
-								&
-				\multicolumn{4}{c}{Dependent variable:} \\ \cmidrule(l){2-5}
-								&
+								    &
+				\multicolumn{3}{c}{Dependent variable:} \\ \cmidrule(l){2-4}
+								    &
 				Received		&
-				Weekly hours	&
 				Months			& 
 				Probability of	\\
-								&
+								    &
 				training		&
 				worked			&
-				worked			&
 				having a 2nd job \\				
-				\cmidrule(l){2-5}
-				Variables 		& 
-				(1)				&
-				(2)				&
-				(3)				&
-				(4)				\\
+				\cmidrule(l){2-4}
+				Variables 	& 
+				(1)				  &
+				(2)				  &
+				(3)				  \\
 				\midrule 
-				\multicolumn{5}{@{}l}{\textit{Panel A. Overall}}				\\				
+				\multicolumn{4}{@{}l}{\textit{Panel A. Overall}}				\\				
 				\primitiveinput{tables/main_did_other_outcomes.tex} 			\\ [-1em]
 				\midrule
-				\multicolumn{5}{@{}l}{\textit{Panel B. Females}}				\\	
+				\multicolumn{4}{@{}l}{\textit{Panel B. Females}}				\\	
 				\primitiveinput{tables/main_did_other_outcomes_females.tex} 	\\ [-1em]
 				\midrule
-				\multicolumn{5}{@{}l}{\textit{Panel C. Males}}					\\
+				\multicolumn{4}{@{}l}{\textit{Panel C. Males}}					\\
 				\primitiveinput{tables/main_did_other_outcomes_males.tex} 		\\ [-1em]
 				\midrule			
-				Controls						& Yes & Yes	& Yes & Yes \\
-				Regional Fixed Effects			& Yes & Yes	& Yes & Yes \\
-				Occupation Fixed Effects		& Yes & Yes & Yes &	Yes	\\
-				Primary Activity Fixed Effects	& Yes & Yes	& Yes & Yes	\\						 				
+				Controls						            & Yes & Yes	& Yes \\
+				Regional Fixed Effects			    & Yes & Yes & Yes \\
+				Occupation Fixed Effects		    & Yes & Yes &	Yes	\\
+				Primary Activity Fixed Effects	& Yes	& Yes & Yes	\\						 				
 				\bottomrule
 			\end{tabular}
 			\begin{tablenotes}
 				\setlength\labelsep{0pt}
 				\footnotesize
-				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is single nearest-neighbour within a caliper of 0.0001 imposing common support. We use the sample of self-employed workers from 2009 and 2014 LSMS. Post is a dummy variable equal to 1 if year is 2014 and 0 if year is 2009. Eligibility is a dummy variable equal to 1 if individuals are eligible for the SBFE program and 0 otherwise. Received training is a dummy variable equal to 1 if individuals answered that they received training and 0 otherwise. Probability of having a 2nd job is a dummy variable equal to 1 if individuals answered that they have a second job and 0 otherwise. Controls include gender, age, household size, years of education, and area of residence, four regional fixed effects, nine occupation fixed effects, and eighteen primary activity fixed effects. Robust standard errors clustered at the year times eighteen primary economic sectors are shown in parentheses. *** p<0.01, ** p<0.05, * p<0.1.
+				\item \textit{Notes}: This table reports OLS estimates of a matched sample. The matching estimator is full Mahalanobis using 10 neighbors without caliper We use the sample of self-employed workers from 2009 and 2014 LSMS. Post is a dummy variable equal to 1 if year is 2014 and 0 if year is 2009. Eligibility is a dummy variable equal to 1 if individuals are eligible for the SBFE program and 0 otherwise. Received training is a dummy variable equal to 1 if individuals answered that they received training and 0 otherwise. Probability of having a 2nd job is a dummy variable equal to 1 if individuals answered that they have a second job and 0 otherwise. Controls include gender, age, household size, years of education, and area of residence, four regional fixed effects, nine occupation fixed effects, and eighteen primary activity fixed effects. Robust standard errors clustered at the year times eighteen primary economic sectors are shown in parentheses. *** p<0.01, ** p<0.05, * p<0.1.
 			\end{tablenotes}
 		\end{threeparttable}
 	\end{adjustbox}

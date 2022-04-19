@@ -26,9 +26,8 @@
 		
 *** 0.1 Set file path
 	if inlist("`c(username)'","maximiliano","Maximiliano", "WB559559", "wb559559", "ifyou"){
-		global project			"D:/Documents/GitHub/research-projects/kdi-self-employment"
+		global project			"C:/Users/ifyou/Documents/GitHub/research-projects/kdi-self-employment"
 	} 
-	
 	
 *** 0.2 Set relative folders
 	global dofiles		"${project}/dofiles"
@@ -39,7 +38,7 @@
 	global emnv_2014 	"${data}/raw/2014"
 	global data_int 	"${data}/intermediate"
 	
-  global comcal = 1
+  global comcal = 0
   global caliper  = 0.0001
   if (${comcal} == 1) {
   	global psmatch = "com caliper(${caliper})"
@@ -50,9 +49,9 @@
 		global figures 	"${outputs}/desc_stats_cap_0_0001/figures"
   }
 	
-  global nnncal = 0
+  global nnncal = 1
   if (${nnncal} == 1) {
-    global nn       = 20
+    global nn       = 10
     global psmatch  = "neighbor(${nn})"  	
     global weights  = "[aw = _weight]"
      
@@ -82,20 +81,22 @@
 	// To install all the required programs
 	run "${dofiles}/programs/packages.do"	 
 
-	packages ietoolkit winsor2 nsplit esttab psmatch2 reghdfe ivreghdfe ivreg2 ranktest
+	packages ietoolkit winsor2 nsplit esttab psmatch2 reghdfe ivreghdfe ivreg2 ranktest ftools
 	ieboilstart, version(15.1)
 	
 	// TvsC to create comparison between eligible and non elitgible groups
 	run "${dofiles}/programs/tvsc.do"	
 	
 *** 0.5 Execution globals
-	global cleaning 	0
-	global append_dta	0
-	global construct	0
+	global cleaning 	1
+	global append_dta	1
+	global construct	1
 	global analysis		1
 	
 	set scheme s1color 	
-	  
+	 
+  exit
+  
 ********************************************************************************
 ***	Part 1:  Cleaning 
 ********************************************************************************

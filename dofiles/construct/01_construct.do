@@ -291,9 +291,27 @@
 	gen time_activity_1 = main_cat_1 * 10000 + year 
 	  
   drop if age < 14
+  drop if age < 16 & main_cat_1 == 6
   drop if age > 60 
    
 *** Save dataset
 	save "${data_int}/emnv_cuaen_eligibility.dta", replace 
+  
+  
+  
+//   recode `var'                        ///
+//   (011 014 020 151 152 153 154 155  ///
+//   160 171 172 173 181 182 191 192   ///
+//   201 202 210 221 222 223 291 292   ///
+//   313 315 319 323 331 332 361 369   ///
+//   451 452 453 454 455 501 502 503   ///
+//   504 505 506 511 512 513 514 515   ///
+//   519 521 522 523 524 525 526 551   ///
+//   552 = 1 "Eligible")               ///
+//   (else = 0 "Not Eligible") if      ///
+//   !missing(`var'),                  ///
+//   gen(eligibility_`i')
+//    
+//   label var eligibility_`i' "Eligibility status: activity `i'"
 	
 	

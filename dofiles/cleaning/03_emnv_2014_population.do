@@ -226,25 +226,25 @@
 	local i = 1
 	
 	foreach var in `vars' {			
-		recode  `var' 															///
+		recode  `var' 															                      ///
 				(100/499=1 "Agricultura, Ganadería, Caza y Silvicultura") 		///
-				(500/999=2 "Pesca y Acuicultura")								/// 
-				(1000/1499=3 "Explotación de Minas y Canteras") 				///
-				(1500/3999=4 "Industria Manufacturera") 						///
-				(4000/4499=5 "Suministro de Electricidad, Gas y Agua") 			///
-				(4500/4999=6 "Construcción") 									///
-				(5000/5499=7 "Comercio") 										///
-				(5500/5999=8 "Hoteles y Restaurantes") 							///
-				(6000/6499=9 "Transporte y Comunicaciones") 					///
-				(6500/6999=10 "Intermediacion Financiera") 						///
+				(500/999=2 "Pesca y Acuicultura")								              /// 
+				(1000/1499=3 "Explotación de Minas y Canteras") 				      ///
+				(1500/3999=4 "Industria Manufacturera") 						          ///
+				(4000/4499=5 "Suministro de Electricidad, Gas y Agua") 			  ///
+				(4500/4999=6 "Construcción") 									                ///
+				(5000/5499=7 "Comercio") 										                  ///
+				(5500/5999=8 "Hoteles y Restaurantes") 							          ///
+				(6000/6499=9 "Transporte y Comunicaciones") 					        ///
+				(6500/6999=10 "Intermediacion Financiera") 						        ///
 				(7000/7499=11 "Serviocios Inmobiliarios y Empresariales") 		///
-				(7500/7999=12 "Administración Pública y Defensa") 				///
-				(8000/8499=13 "Enseñanza") 										///
-				(8500/8999=14 "Servicios Sociales y de Salud") 					///	
-				(9000/9499=15 "Servicios Comunitarios y Social") 				///
-				(9500/9799=16 "Servicios Domésticos Privados") 					///
-				(9800/9899=17 "Organismos Extraterritoriales") 					///
-				(9900/9999=18 "No Espeficicadas"),  							///
+				(7500/7999=12 "Administración Pública y Defensa") 				    ///
+				(8000/8499=13 "Enseñanza") 										                ///
+				(8500/8999=14 "Servicios Sociales y de Salud") 					      ///	
+				(9000/9499=15 "Servicios Comunitarios y Social") 				      ///
+				(9500/9799=16 "Servicios Domésticos Privados") 					      ///
+				(9800/9899=17 "Organismos Extraterritoriales") 					      ///
+				(9900/9999=18 "No Espeficicadas"),  							            ///
 				gen(activity_`i')			
 				
 		gen raw_activity_`i' = `var'
